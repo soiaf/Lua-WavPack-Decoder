@@ -15,8 +15,7 @@
 -- Change the following value to an even number to reflect the maximum number of samples to be processed
 -- per call to WavpackUnpackSamples()
 
---SAMPLE_BUFFER_SIZE = 256
-SAMPLE_BUFFER_SIZE = 8192
+SAMPLE_BUFFER_SIZE = 256
 
 BYTES_STORED = 3       -- 1-4 bytes/sample
 MONO_FLAG  = 4       -- not stereo
