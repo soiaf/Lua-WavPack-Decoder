@@ -15,9 +15,9 @@ require("WavPack")
 
 
 RiffChunkHeader = {
-    ckID = {},
-    ckSize = 0,
-    formType = {}
+	ckID = {},
+	ckSize = 0,
+	formType = {}
 }	
 function RiffChunkHeader:new()
 	o = {}
@@ -27,8 +27,8 @@ function RiffChunkHeader:new()
 end
 
 FmtChunkHeader = {
-    ckID = {},
-    ckSize = 0
+	ckID = {},
+	ckSize = 0
 }
 function FmtChunkHeader:new()
 	o = {}
@@ -38,8 +38,8 @@ function FmtChunkHeader:new()
 end
 
 DtChunkHeader = {
-    ckID = {},
-    ckSize = 0
+	ckID = {},
+	ckSize = 0
 }
 function DtChunkHeader:new()
 	o = {}
@@ -49,12 +49,12 @@ function DtChunkHeader:new()
 end
 
 WaveHeader = {
-    FormatTa = 0,
-    NumChannels = 0,
-    SampleRate = 0,
-    BytesPerSecond = 0,
-    BlockAlign = 0,
-    BitsPerSample = 0
+	FormatTa = 0,
+	NumChannels = 0,
+	SampleRate = 0,
+	BytesPerSecond = 0,
+	BlockAlign = 0,
+	BitsPerSample = 0
 }
 function WaveHeader:new()
 	o = {}
@@ -67,64 +67,64 @@ end
 -- little-endian data with (possibly) less than 4 bytes / sample.
 
 function format_samples( bps, src,  samcnt)
-    temp = 0
-    counter = 0
-    counter2 = 0
-    dst = {}
+	local temp = 0
+	local counter = 1	-- so our array starts at 1 (Lua preference)
+	local counter2 = 0
+	local dst = {}
 
-    if bps == 1 then
-        while (samcnt > 0) do
-            dst[counter] = bit32.band(0x00FF, (src[counter] + 128))
-            counter = counter + 1
-            samcnt = samcnt - 1
+	if bps == 1 then
+		while (samcnt > 0) do
+			dst[counter] = bit32.band(0x00FF, (src[counter] + 128))
+			counter = counter + 1
+			samcnt = samcnt - 1
 		end	
-            
-    elseif bps == 2 then
-        while (samcnt > 0) do
-            temp = src[counter2]
-            dst[counter] = bit32.band(temp , 0xFF)
-            counter = counter + 1
-            dst[counter] = bit32.rshift(bit32.band(temp, 0xff00), 8)
-            counter = counter + 1
-            counter2 = counter2 + 1
-            samcnt = samcnt - 1
-        end    
-    elseif bps == 3 then
-        while (samcnt > 0) do
-            temp = src[counter2]
-            dst[counter] = bit32.band(temp, 0xff)
-            counter = counter + 1
-            dst[counter] = bit32.rshift(bit32.band(temp, 0xff00), 8)
-            counter = counter + 1
-            dst[counter] = bit32.rshift(bit32.band(temp, 0xff0000), 16)
-            counter = counter + 1
-            counter2 = counter2 + 1
-            samcnt = samcnt - 1
+			
+	elseif bps == 2 then
+		while (samcnt > 0) do
+			temp = src[counter2]
+			dst[counter] = bit32.band(temp , 0xFF)
+			counter = counter + 1
+			dst[counter] = bit32.rshift(bit32.band(temp, 0xff00), 8)
+			counter = counter + 1
+			counter2 = counter2 + 1
+			samcnt = samcnt - 1
+		end    
+	elseif bps == 3 then
+		while (samcnt > 0) do
+			temp = src[counter2]
+			dst[counter] = bit32.band(temp, 0xff)
+			counter = counter + 1
+			dst[counter] = bit32.rshift(bit32.band(temp, 0xff00), 8)
+			counter = counter + 1
+			dst[counter] = bit32.rshift(bit32.band(temp, 0xff0000), 16)
+			counter = counter + 1
+			counter2 = counter2 + 1
+			samcnt = samcnt - 1
 		end
-    elseif bps == 4 then
-        while (samcnt > 0) do
-            temp = src[counter2]
-            dst[counter] = bit32.band(temp, 0xff)
-            counter = counter + 1
-            dst[counter] = bit32.rshift(bit32.band(temp, 0xff00), 8)
-            counter = counter + 1
-            dst[counter] = bit32.rshift(bit32.band(temp, 0xff0000), 16)
-            counter = counter + 1
-            dst[counter] = bit32.rshift(bit32.band(temp, 0xff000000), 24)
-            counter = counter + 1
-            counter2 = counter2 + 1
-            samcnt = samcnt - 1
+	elseif bps == 4 then
+		while (samcnt > 0) do
+			temp = src[counter2]
+			dst[counter] = bit32.band(temp, 0xff)
+			counter = counter + 1
+			dst[counter] = bit32.rshift(bit32.band(temp, 0xff00), 8)
+			counter = counter + 1
+			dst[counter] = bit32.rshift(bit32.band(temp, 0xff0000), 16)
+			counter = counter + 1
+			dst[counter] = bit32.rshift(bit32.band(temp, 0xff000000), 24)
+			counter = counter + 1
+			counter2 = counter2 + 1
+			samcnt = samcnt - 1
 		end
 	end
-	
-    return dst
+
+	return dst
 end
 
 
 -- Start of main routine
 
-temp_buffer = {}
-pcm_buffer =  {}
+local temp_buffer = {}
+local pcm_buffer =  {}
 
 FormatChunkHeader = FmtChunkHeader:new()
 DataChunkHeader = DtChunkHeader:new()
@@ -142,9 +142,9 @@ local num_channels = 0
 local bps = 0
 
 if arg[1] then
-     inputWVFile = arg[1]
+	inputWVFile = arg[1]
 else
-     inputWVFile = "input.wv"
+	inputWVFile = "input.wv"
 end
 
 print("Input file: ", inputWVFile)
@@ -159,9 +159,9 @@ end
 wpc = WavpackOpenFileInput(fistream)
 
 if (wpc.error) then
-    print ("Sorry an error has occured")
-    print (wpc.error_message)
-    os.exit()
+	print ("Sorry an error has occured")
+	print (wpc.error_message)
+	os.exit()
 end	
 
 
@@ -172,7 +172,7 @@ print ("The WavPack file has " ,num_channels, " channels")
 total_samples = WavpackGetNumSamples(wpc)
 
 print ("The WavPack file has " , total_samples , " samples")
- 
+
 bps = WavpackGetBytesPerSample(wpc)
 
 print ("The WavPack file has " , bps , " bytes per sample")
@@ -279,73 +279,80 @@ myDataChunkHeaderAsByteArray[6] = bit32.band(bit32.rshift(DataChunkHeader.ckSize
 myDataChunkHeaderAsByteArray[5] = bit32.band(bit32.rshift(DataChunkHeader.ckSize, 8) , 0xFF)
 myDataChunkHeaderAsByteArray[4] = bit32.band(DataChunkHeader.ckSize , 0xFF)
 
-	fostream = assert(io.open("output.wav", "wb"))
-	
-	if(nil == fostream) then
-		print("Sorry, error opening output file")
-		os.exit()
-	end
+fostream = assert(io.open("output.wav", "wb"))
 
-    for i=0,11,1 do
-        fostream:write(string.char(myRiffChunkHeaderAsByteArray[i]))
-	end
-	
-	for i=0,7,1 do
-        fostream:write(string.char(myFormatChunkHeaderAsByteArray[i]))
-	end
+if(nil == fostream) then
+	print("Sorry, error opening output file")
+	os.exit()
+end
 
-	for i=0,15,1 do
-        fostream:write(string.char(myWaveHeaderAsByteArray[i]))
-	end	
+local start_time = os.clock()
 
-	for i=0,7,1 do
-        fostream:write(string.char(myDataChunkHeaderAsByteArray[i]))
-	end	
-	
+for i=0,11,1 do
+	fostream:write(string.char(myRiffChunkHeaderAsByteArray[i]))
+end
+
+for i=0,7,1 do
+	fostream:write(string.char(myFormatChunkHeaderAsByteArray[i]))
+end
+
+for i=0,15,1 do
+	fostream:write(string.char(myWaveHeaderAsByteArray[i]))
+end	
+
+for i=0,7,1 do
+	fostream:write(string.char(myDataChunkHeaderAsByteArray[i]))
+end	
 
 
-    --newday = 0
-    --while newday < 300 :
-    while (true) do
+local binarydata={}
+local t = {}
+
+--newday = 0
+--while newday < 300 :
+while (true) do
 --print ("ITERATION ",newday)
 --newday = newday + 1
-        local samples_unpacked = 0
+	local samples_unpacked = 0
+	t = {}	-- reset
 
-        samples_unpacked = WavpackUnpackSamples(wpc, temp_buffer, SAMPLE_BUFFER_SIZE / num_channels);
+	samples_unpacked = WavpackUnpackSamples(wpc, temp_buffer, SAMPLE_BUFFER_SIZE / num_channels);
 
-        total_unpacked_samples = total_unpacked_samples + samples_unpacked
+	total_unpacked_samples = total_unpacked_samples + samples_unpacked
 
-        if (samples_unpacked > 0) then
-            samples_unpacked = samples_unpacked * num_channels
+	if (samples_unpacked > 0) then
+		samples_unpacked = samples_unpacked * num_channels
 
-            pcm_buffer = format_samples(bps, temp_buffer, samples_unpacked)
+		pcm_buffer = format_samples(bps, temp_buffer, samples_unpacked)
 
-
-            binarydata = ""
-            for i = 0, (samples_unpacked * bps) - 1, 1 do
-                binarydata = binarydata .. string.char(pcm_buffer[i])
-			end
+		for i = 1, (samples_unpacked * bps), 1 do
+			t[i] = string.char(pcm_buffer[i])
+		end
+		
+		binarydata = table.concat(t,"")
+		
+		fostream:write(binarydata)
+	end	
 			
-            fostream:write(binarydata)
-		end	
-                
-        if (samples_unpacked == 0) then	
-            break
-		end	
-	end		
+	if (samples_unpacked == 0) then	
+		break
+	end	
+end		
 
 if ((WavpackGetNumSamples(wpc) ~= -1) and (total_unpacked_samples ~= WavpackGetNumSamples(wpc))) then
-    print "Incorrect number of samples" 
-    fostream:close()
-    os.exit()
+	print "Incorrect number of samples" 
+	fostream:close()
+	os.exit()
 end
 
 if (WavpackGetNumErrors(wpc) > 0) then
-    print "CRC errors detected"
-    fostream:close()
-    os.exit()
+	print "CRC errors detected"
+	fostream:close()
+	os.exit()
 end	
 
 fostream:close()
+
+print(string.format("Time to process file: %.2f secs\n", os.clock() - start_time))
 
 
