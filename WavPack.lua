@@ -208,21 +208,21 @@ ones_count_table = {
 0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,8}
 
 
-entropy_data = {}		
+entropy_data = {}        
 function entropy_data:new()
-	local object = {
-		slow_level = 0,
-		median = {},
-		error_limit = 0
-	}
-	object.median[0] = 0
-	object.median[1] = 0
-	object.median[2] = 0
+    local object = {
+        slow_level = 0,
+        median = {},
+        error_limit = 0
+    }
+    object.median[0] = 0
+    object.median[1] = 0
+    object.median[2] = 0
 
-	setmetatable(object,self)
-	self.__index = self
-	return object
-end			
+    setmetatable(object,self)
+    self.__index = self
+    return object
+end            
 
 words_data = {
     bitrate_delta = {},
@@ -237,33 +237,33 @@ words_data = {
     c = {}
 }
 function words_data:new()
-	o = {}
-	setmetatable(o,self)
-	self.__index = self
-	self.bitrate_delta[2] = 0
-	self.bitrate_acc[2] = 0
-	self.c[0] = self.temp_ed1
-	self.c[1] = self.temp_ed2
-	return o
-end	
+    o = {}
+    setmetatable(o,self)
+    self.__index = self
+    self.bitrate_delta[2] = 0
+    self.bitrate_acc[2] = 0
+    self.c[0] = self.temp_ed1
+    self.c[1] = self.temp_ed2
+    return o
+end    
 
 decorr_pass = {}
 function decorr_pass:new()
-	local object = {
-		term = 0,
-		delta = 0,
-		weight_A = 0,
-		weight_B = 0,
-		samples_A = {},
-		samples_B = {}
-	}
-	object.samples_A[MAX_TERM] = 0
-	object.samples_B[MAX_TERM] = 0
-	
-	setmetatable(object,self)
-	self.__index = self
-	return object
-end			
+    local object = {
+        term = 0,
+        delta = 0,
+        weight_A = 0,
+        weight_B = 0,
+        samples_A = {},
+        samples_B = {}
+    }
+    object.samples_A[MAX_TERM] = 0
+    object.samples_B[MAX_TERM] = 0
+    
+    setmetatable(object,self)
+    self.__index = self
+    return object
+end            
 
 WavpackHeader = {
     ckID = {},
@@ -277,13 +277,13 @@ WavpackHeader = {
     flags = 0,
     crc = 0,    
     status = 0    -- 1 means error
-}	
+}    
 function WavpackHeader:new()
-	o = {}
-	setmetatable(o,self)
-	self.__index = self
-	self.ckID[4]=0
-	return o
+    o = {}
+    setmetatable(o,self)
+    self.__index = self
+    self.ckID[4]=0
+    return o
 end
 
 WavpackMetadata = {
@@ -294,11 +294,11 @@ WavpackMetadata = {
     status = 0    -- 0 ok, 1 error
 }
 function WavpackMetadata:new()
-	o = {}
-	setmetatable(o,self)
-	self.__index = self
-	self.data[1024] = 0
-	return o
+    o = {}
+    setmetatable(o,self)
+    self.__index = self
+    self.data[1024] = 0
+    return o
 end
 
 WavpackConfig = {
@@ -311,11 +311,11 @@ WavpackConfig = {
     channel_mask = 0,
 }
 function WavpackConfig:new()
-	o = {}
-	setmetatable(o,self)
-	self.__index = self
-	return o
-end	
+    o = {}
+    setmetatable(o,self)
+    self.__index = self
+    return o
+end    
 
 Bitstream = {
     bs_end = 0,
@@ -330,12 +330,12 @@ Bitstream = {
     buf_index = 0
 }
 function Bitstream:new()
-	o = {}
-	setmetatable(o,self)
-	self.__index = self
-	self.buf[1024] = 0
-	return o
-end		
+    o = {}
+    setmetatable(o,self)
+    self.__index = self
+    self.buf[1024] = 0
+    return o
+end        
 
 
 WavpackStream = {
@@ -374,33 +374,33 @@ WavpackStream = {
     dp15 =  decorr_pass:new(),
     dp16 =  decorr_pass:new(),
 
-	decorr_passes = {}
+    decorr_passes = {}
 
 }
 function WavpackStream:new()
-	o = {}
-	setmetatable(o,self)
-	self.__index = self
-	self.decorr_passes[0] = self.dp1
-	self.decorr_passes[1] = self.dp2
-	self.decorr_passes[2] = self.dp3
-	self.decorr_passes[3] = self.dp4
-	self.decorr_passes[4] = self.dp5
-	self.decorr_passes[5] = self.dp6
-	self.decorr_passes[6] = self.dp7
-	self.decorr_passes[7] = self.dp8
-	self.decorr_passes[8] = self.dp9
-	self.decorr_passes[9] = self.dp10
-	self.decorr_passes[10] = self.dp11
-	self.decorr_passes[11] = self.dp12
-	self.decorr_passes[12] = self.dp13
-	self.decorr_passes[13] = self.dp14
-	self.decorr_passes[14] = self.dp15
-	self.decorr_passes[15] = self.dp16
-	return o
-end		
+    o = {}
+    setmetatable(o,self)
+    self.__index = self
+    self.decorr_passes[0] = self.dp1
+    self.decorr_passes[1] = self.dp2
+    self.decorr_passes[2] = self.dp3
+    self.decorr_passes[3] = self.dp4
+    self.decorr_passes[4] = self.dp5
+    self.decorr_passes[5] = self.dp6
+    self.decorr_passes[6] = self.dp7
+    self.decorr_passes[7] = self.dp8
+    self.decorr_passes[8] = self.dp9
+    self.decorr_passes[9] = self.dp10
+    self.decorr_passes[10] = self.dp11
+    self.decorr_passes[11] = self.dp12
+    self.decorr_passes[12] = self.dp13
+    self.decorr_passes[13] = self.dp14
+    self.decorr_passes[14] = self.dp15
+    self.decorr_passes[15] = self.dp16
+    return o
+end        
 
-		
+        
 WavpackContext = {
     config = WavpackConfig:new(),
     stream = WavpackStream:new(),
@@ -421,12 +421,12 @@ WavpackContext = {
 }
 
 function WavpackContext:new()
-	o = {}
-	setmetatable(o,self)
-	self.__index = self
-	self.read_buffer[self.READ_BUFFER_SIZE] = 0
-	return o
-end	
+    o = {}
+    setmetatable(o,self)
+    self.__index = self
+    self.read_buffer[self.READ_BUFFER_SIZE] = 0
+    return o
+end    
 
 -- This function reads data from the specified stream in search of a valid
 -- WavPack 4.0 audio block. If this fails in 1 megabyte (or an invalid or
@@ -450,7 +450,7 @@ function WavpackOpenFileInput(infile)
     wpc.total_samples = -1
     wpc.norm_offset = 0
     wpc.open_flags = 0
-	
+    
     -- open the source file for reading and store the size
 
     while (wps.wphdr.block_samples == 0) do
@@ -460,11 +460,11 @@ function WavpackOpenFileInput(infile)
             wpc.error_message = "not compatible with this version of WavPack file!"
             wpc.error = true
             return (wpc)
-		end	
+        end    
 
         if (wps.wphdr.block_samples > 0 and wps.wphdr.total_samples ~= -1) then
             wpc.total_samples = wps.wphdr.total_samples
-		end	
+        end    
 
         -- lets put the stream back in the context
 
@@ -473,51 +473,51 @@ function WavpackOpenFileInput(infile)
         if ((unpack_init(wpc)) == false) then
             wpc.error = true
             return wpc
-		end
-		
-	end
+        end
+        
+    end
 
-	wpc.config.flags = bit32.band(wpc.config.flags, bit32.bnot(0xFF))
-	wpc.config.flags = bit32.bor(wpc.config.flags, bit32.band(wps.wphdr.flags, 0xff))
+    wpc.config.flags = bit32.band(wpc.config.flags, bit32.bnot(0xFF))
+    wpc.config.flags = bit32.bor(wpc.config.flags, bit32.band(wps.wphdr.flags, 0xff))
 
-	wpc.config.bytes_per_sample = bit32.band(wps.wphdr.flags, BYTES_STORED) + 1
+    wpc.config.bytes_per_sample = bit32.band(wps.wphdr.flags, BYTES_STORED) + 1
     wpc.config.float_norm_exp = wps.float_norm_exp
 
-	wpc.config.bits_per_sample = ((wpc.config.bytes_per_sample * 8) - bit32.rshift(bit32.band(wps.wphdr.flags,SHIFT_MASK), SHIFT_LSB))
+    wpc.config.bits_per_sample = ((wpc.config.bytes_per_sample * 8) - bit32.rshift(bit32.band(wps.wphdr.flags,SHIFT_MASK), SHIFT_LSB))
 
-	if (bit32.btest(wpc.config.flags, FLOAT_DATA)) then
+    if (bit32.btest(wpc.config.flags, FLOAT_DATA)) then
         wpc.config.bytes_per_sample = 3
         wpc.config.bits_per_sample = 24
-	end	
+    end    
 
     if (wpc.config.sample_rate == 0) then
         if (wps.wphdr.block_samples == 0 or bit32.band(wps.wphdr.flags, SRATE_MASK) == SRATE_MASK) then
             wpc.config.sample_rate = 44100
         else
             wpc.config.sample_rate = sample_rates[(bit32.rshift(bit32.band(wps.wphdr.flags,SRATE_MASK), SRATE_LSB))+1]
-		end
-	end
+        end
+    end
 
     if (wpc.config.num_channels == 0) then
-		if (bit32.btest(wps.wphdr.flags, MONO_FLAG)) then
+        if (bit32.btest(wps.wphdr.flags, MONO_FLAG)) then
             wpc.config.num_channels = 1
         else
             wpc.config.num_channels = 2
-		end	
+        end    
 
         wpc.config.channel_mask = 0x5 - wpc.config.num_channels
-	end	
-	
-	if(bit32.band(wps.wphdr.flags, FINAL_BLOCK) == 0 ) then
-		if (bit32.band(wps.wphdr.flags, MONO_FLAG) ~= 0) then
+    end    
+    
+    if(bit32.band(wps.wphdr.flags, FINAL_BLOCK) == 0 ) then
+        if (bit32.band(wps.wphdr.flags, MONO_FLAG) ~= 0) then
             wpc.reduced_channels = 1
         else
             wpc.reduced_channels = 2
-		end	
-	end
+        end    
+    end
 
     return wpc
-end		
+end        
 
 -- This function obtains general information about an open file and returns
 -- a mask with the following bit values:
@@ -539,25 +539,25 @@ function WavpackGetMode (wpc)
             mode = bit32.bor(mode,MODE_HYBRID)
         elseif (bit32.band(wpc.config.flags, CONFIG_LOSSY_MODE)==0) then
             mode = bit32.bor(mode,MODE_LOSSLESS)
-		end	
+        end    
 
         if (wpc.lossy_blocks ~= 0) then
             mode = bit32.band(mode, bit32.bnot(MODE_LOSSLESS))
-		end	
+        end    
 
         if ( bit32.band(wpc.config.flags, CONFIG_FLOAT_DATA) ~= 0) then
             mode = bit32.bor(mode, MODE_FLOAT)
-		end	
+        end    
 
         if ( bit32.band(wpc.config.flags, CONFIG_HIGH_FLAG) ~= 0) then
             mode = bit32.bor(mode, MODE_HIGH)
-		end	
+        end    
 
         if ( bit32.band(wpc.config.flags, CONFIG_FAST_FLAG) ~= 0) then
             mode = bit32.bor(mode, MODE_FAST)
-		end	
-	end
-	
+        end    
+    end
+    
     return mode
 end
 
@@ -581,7 +581,7 @@ function  WavpackUnpackSamples(wpc, buffer, samples)
     local temp_buffer = {}
     local buf_idx = 0
     local bytes_returned = 0
-	local tempcount = 0
+    local tempcount = 0
 
 
     while (samples > 0) do
@@ -592,26 +592,26 @@ function  WavpackUnpackSamples(wpc, buffer, samples)
 
             if (wps.wphdr.status == 1) then
                 break
-			end	
+            end    
 
             if (wps.wphdr.block_samples == 0 or wps.sample_index == wps.wphdr.block_index) then
-                if ((unpack_init(wpc)) == false) then			
+                if ((unpack_init(wpc)) == false) then            
                     break
-				end
-			end
-		end			
+                end
+            end
+        end            
 
         if (wps.wphdr.block_samples == 0 or bit32.band(wps.wphdr.flags, INITIAL_BLOCK) == 0
-            or wps.sample_index >= wps.wphdr.block_index + wps.wphdr.block_samples) then			
+            or wps.sample_index >= wps.wphdr.block_index + wps.wphdr.block_samples) then            
             goto continue
-		end	
+        end    
 
         if (wps.sample_index < wps.wphdr.block_index) then
             samples_to_unpack = wps.wphdr.block_index - wps.sample_index
 
             if (samples_to_unpack > samples) then
                 samples_to_unpack = samples
-			end	
+            end    
 
             wps.sample_index = wps.sample_index + samples_to_unpack
             samples_unpacked = samples_unpacked + samples_to_unpack
@@ -621,26 +621,26 @@ function  WavpackUnpackSamples(wpc, buffer, samples)
                 samples_to_unpack = samples_to_unpack * wpc.reduced_channels
             else
                 samples_to_unpack = samples_to_unpack * num_channels
-			end	
+            end    
 
             while (samples_to_unpack > 0) do
                 temp_buffer[bcounter] = 0
                 bcounter = bcounter + 1
                 samples_to_unpack = samples_to_unpack - 1
-			end	
+            end    
 
             goto continue
-		end		
-	
+        end        
+    
         samples_to_unpack = wps.wphdr.block_index + wps.wphdr.block_samples - wps.sample_index
 
         if (samples_to_unpack > samples) then
             samples_to_unpack = samples
-		end	
+        end    
 
         for mycleanup = 0,256 ,1 do
             temp_buffer[mycleanup] = 0
-		end	
+        end    
         
         unpack_samples(wpc, temp_buffer, samples_to_unpack)
 
@@ -648,13 +648,13 @@ function  WavpackUnpackSamples(wpc, buffer, samples)
             bytes_returned = (samples_to_unpack * wpc.reduced_channels)
         else
             bytes_returned = (samples_to_unpack * num_channels)
-		end	
+        end    
 
         tempcount = 0
         for mycount = buf_idx, buf_idx+bytes_returned-1, 1 do
             buffer[mycount] = temp_buffer[tempcount]
             tempcount = tempcount + 1
-		end	
+        end    
 
         buf_idx = buf_idx + bytes_returned
 
@@ -664,14 +664,14 @@ function  WavpackUnpackSamples(wpc, buffer, samples)
         if (wps.sample_index == wps.wphdr.block_index + wps.wphdr.block_samples) then
             if (check_crc_error(wpc) > 0) then
                 wpc.crc_errors = wpc.crc_errors + 1
-			end	
-		end	
+            end    
+        end    
 
-        if (wps.sample_index == wpc.total_samples) then	
+        if (wps.sample_index == wpc.total_samples) then    
             break
-		end
-	::continue::
-	end
+        end
+    ::continue::
+    end
     return (samples_unpacked)
 end
 
@@ -684,7 +684,7 @@ function WavpackGetNumSamples(wpc)
         return (wpc.total_samples)
     else
         return -1
-	end	
+    end    
 end
 
 -- Get the current sample index position, or -1 if unknown
@@ -692,8 +692,8 @@ end
 function WavpackGetSampleIndex (wpc)
     if (nil ~= wpc) then
         return wpc.stream.sample_index
-	end
-	
+    end
+    
     return -1
 end
 
@@ -704,7 +704,7 @@ function WavpackGetNumErrors(wpc)
         return wpc.crc_errors
     else
         return 0
-	end	
+    end    
 end
 
 -- return if any uncorrected lossy blocks were actually written or read
@@ -714,7 +714,7 @@ function WavpackLossyBlocks (wpc)
          return wpc.lossy_blocks
     else 
         return 0
-	end	
+    end    
 end
 
 -- Returns the sample rate of the specified WavPack file
@@ -724,7 +724,7 @@ function WavpackGetSampleRate(wpc)
         return wpc.config.sample_rate
     else 
         return 44100
-	end
+    end
 end
         
 -- Returns the number of channels of the specified WavPack file. Note that
@@ -736,7 +736,7 @@ function WavpackGetNumChannels(wpc)
         return wpc.config.num_channels
     else
         return 2
-	end	
+    end    
 end
 
 -- Returns the actual number of valid bits per sample contained in the
@@ -752,7 +752,7 @@ function WavpackGetBitsPerSample(wpc)
         return wpc.config.bits_per_sample
     else
         return 16
-	end	
+    end    
 end
 
 -- Returns the number of bytes used for each sample (1 to 4) in the original
@@ -765,7 +765,7 @@ function WavpackGetBytesPerSample(wpc)
         return wpc.config.bytes_per_sample
     else
         return 2
-	end	
+    end    
 end
 
 -- This function will return the actual number of channels decoded from the
@@ -780,7 +780,7 @@ function WavpackGetReducedChannels(wpc)
         return wpc.config.num_channels
     else
         return 2
-	end	
+    end    
 end
 
 -- Read from current file position until a valid 32-byte WavPack 4.0 header is
@@ -788,7 +788,7 @@ end
 -- then an error is returned. No additional bytes are read past the header. 
 
 function read_next_header(infile, wphdr)
-	local buffer = {}
+    local buffer = {}
     buffer[32] = 0 -- 32 is the size of a WavPack Header
 
     local bytes_skipped = 0
@@ -796,9 +796,9 @@ function read_next_header(infile, wphdr)
     local counter = 0
 
     while (true) do
-		for i =0,bleft-1,1 do
+        for i =0,bleft-1,1 do
             buffer[i] = buffer[32 - bleft + i]
-		end
+        end
 
         counter = 0
 
@@ -806,18 +806,18 @@ function read_next_header(infile, wphdr)
         if not temp then
             wphdr.status = 1
             return wphdr
-		end
-		
+        end
+        
         -- Check if we are at the end of the file
-		-- # gives the length
+        -- # gives the length
         if #temp < (32-bleft) then
             wphdr.status = 1
             return wphdr
-		end
+        end
 
-		for i=0, (32-bleft)-1,1 do
+        for i=0, (32-bleft)-1,1 do
             buffer[bleft + i] = string.byte(temp,(i+1))
-		end
+        end
 
         bleft = 32
 
@@ -827,7 +827,7 @@ function read_next_header(infile, wphdr)
         local buf8 = (buffer[8])
         local buf9 = (buffer[9])
         
-		-- wvpk = 119,118,112,107
+        -- wvpk = 119,118,112,107
         if  buffer[0] == 119 and buffer[1] == 118 and buffer[2] == 112 and buffer[3] == 107 and bit32.band(buf4,1) == 0 and buf6 < 16 and buf7 == 0 and buf9 == 4 and buf8 >= bit32.band(MIN_STREAM_VERS,0xff) and buf8 <= bit32.band(MAX_STREAM_VERS,0xff) then
             wphdr.ckID[0] = 'w'
             wphdr.ckID[1] = 'v'
@@ -876,23 +876,23 @@ function read_next_header(infile, wphdr)
         else
             counter = counter + 1
             bleft = bleft - 1
-		end
+        end
 
         while (bleft > 0 and buffer[counter] ~= 119) do
             counter = counter + 1
             bleft = bleft - 1
-		end	
+        end    
 
         bytes_skipped = bytes_skipped + counter
 
-        if (bytes_skipped > 1048576) then	
+        if (bytes_skipped > 1048576) then    
             wphdr.status = 1
             return wphdr
-		end	
-	end		
+        end    
+    end        
 end
 
-function getbit(bs)			
+function getbit(bs)            
     local uns_buf = 0
 
     if (bs.bc > 0) then
@@ -903,19 +903,19 @@ function getbit(bs)
         bs.bc = 7
 
         if (bs.ptr == bs.bs_end) then
-            -- wrap call here			
+            -- wrap call here            
             bs = bs_read(bs)
-		end
-		
+        end
+        
         uns_buf = bit32.band(bs.buf[bs.buf_index], 0xff)
         bs.sr = uns_buf
-	end
-		
+    end
+        
     bs.bitval = bit32.band(bs.sr, 1)
     bs.sr = bit32.rshift(bs.sr, 1)
 
     return bs
-end	
+end    
 
 function getbits(nbits, bs)
     local uns_buf = 0
@@ -927,12 +927,12 @@ function getbits(nbits, bs)
 
         if (bs.ptr == bs.bs_end) then
             bs = bs_read(bs)
-		end	
+        end    
         uns_buf = bit32.band(bs.buf[bs.buf_index], 0xff)
         bs.sr = bit32.bor(bs.sr, bit32.lshift(uns_buf, bs.bc)) -- values in buffer must be unsigned
         bs.sr = bit32.band(bs.sr, 0xffffffff) -- bs.sr is unsigned 32 bit
         bs.bc = bs.bc + 8
-	end
+    end
 
     value = bs.sr
 
@@ -942,7 +942,7 @@ function getbits(nbits, bs)
     else 
         bs.bc = bs.bc - nbits
         bs.sr = bit32.rshift(bs.sr,nbits)
-	end	
+    end    
 
     return (value)
 end
@@ -950,9 +950,9 @@ end
 function bs_open_read(stream, buffer_start, buffer_end, file, file_bytes, passed) 
     bs = Bitstream:new()
 
-	for i =0, (#stream - 1), 1 do
-		bs.buf[i] = string.byte(stream,(i+1))
-	end
+    for i =0, (#stream - 1), 1 do
+        bs.buf[i] = string.byte(stream,(i+1))
+    end
     bs.buf_index = buffer_start
     bs.bs_end = buffer_end
     bs.sr = 0
@@ -966,8 +966,8 @@ function bs_open_read(stream, buffer_start, buffer_end, file, file_bytes, passed
         -- Strange to set an index to -1, but the very first call to getbit will iterate this 
         bs.buf_index = -1
         bs.ptr = -1
-	end
-	
+    end
+    
     return bs
 end
 
@@ -978,20 +978,20 @@ function bs_read(bs)
 
         if (bytes_to_read > bs.file_bytes) then
             bytes_to_read = bs.file_bytes
-		end	
+        end    
 
-		temp = bs.file:read(bytes_to_read)
-		if(nil==temp) then
-			bytes_read = 0
-		else
-			internal_counter = 0
-			for i=1,bytes_to_read,1 do
-				bs.buf[internal_counter] = string.byte(temp,i)
-				internal_counter = internal_counter + 1
-			end	
-			bytes_read = bytes_to_read
-			bs.buf_index = 0
-		end	
+        temp = bs.file:read(bytes_to_read)
+        if(nil==temp) then
+            bytes_read = 0
+        else
+            internal_counter = 0
+            for i=1,bytes_to_read,1 do
+                bs.buf[internal_counter] = string.byte(temp,i)
+                internal_counter = internal_counter + 1
+            end    
+            bytes_read = bytes_to_read
+            bs.buf_index = 0
+        end    
 
 
         if (bytes_read > 0) then
@@ -1000,19 +1000,19 @@ function bs_read(bs)
         else 
             for i = 0, bs.bs_end - bs.buf_index - 1, 1 do
                 bs.buf[i] = -1
-			end	
+            end    
             bs.error = 1
-		end	
+        end    
     else 
         bs.error = 1
-	end	
+    end    
 
     if (bs.error > 0) then
         for i = 0,bs.bs_end - bs.buf_index - 1, 1 do
             bs.buf[i] = -1
-		end	
-	end
-	
+        end    
+    end
+    
     bs.ptr = 0
     bs.buf_index = 0
 
@@ -1026,7 +1026,7 @@ function read_float_info (wps, wpmd)
 
     if bytecnt ~= 4 then
         return false
-	end	
+    end    
 
     wps.float_flags = string.byte(byteptr,counter)
     counter = counter + 1
@@ -1047,43 +1047,43 @@ function float_values (wps, values, num_values)
         shift = 32
     elseif (shift < -32) then
         shift = -32
-	end	
+    end    
 
     while (num_values>0) do
         if (shift > 0) then
             values[value_counter] = bit32.lshift(values[value_counter],shift)
         elseif (shift < 0) then
             --values[value_counter] = bit32.rshift(values[value_counter], -shift)
-			values[value_counter] = signed_rshift(values[value_counter], -shift)
-		end	
+            values[value_counter] = signed_rshift(values[value_counter], -shift)
+        end    
 
         if (values[value_counter] > 8388607) then
             values[value_counter] = 8388607
         elseif (values[value_counter] < -8388608) then
             values[value_counter] = -8388608
-		end	
+        end    
 
         value_counter = value_counter + 1
         num_values = num_values - 1
-	end	
+    end    
 
     return values
 end
 
 function read_metadata_buff(wpc, wpmd)
     local bytes_to_read = 0
-	local bytes_read = 0
+    local bytes_read = 0
     local tchar = 0
 
     wpmd.id = wpc.infile:read(1)
     tchar =   wpc.infile:read(1)
     
-	if(wpmd.id == nil or tchar == nil) then
+    if(wpmd.id == nil or tchar == nil) then
         wpmd.status = 1
         return false
-	end
-	
-	wpmd.id = string.byte(wpmd.id)
+    end
+    
+    wpmd.id = string.byte(wpmd.id)
     tchar =   string.byte(tchar)
 
     wpmd.byte_length = bit32.lshift(tchar, 1)
@@ -1092,13 +1092,13 @@ function read_metadata_buff(wpc, wpmd)
         wpmd.id = bit32.band(wpmd.id, bit32.bnot(ID_LARGE))
 
         tchar = wpc.infile:read(1)
-		
+        
         if(tchar == nil) then
             wpmd.status = 1
             return false
-		end
+        end
 
-		tchar = string.byte(tchar)
+        tchar = string.byte(tchar)
 
         wpmd.byte_length = wpmd.byte_length + bit32.lshift(tchar, 9)
 
@@ -1106,22 +1106,22 @@ function read_metadata_buff(wpc, wpmd)
         if(tchar == nil) then
             wpmd.status = 1
             return false
-		end
-		
-		tchar = string.byte(tchar)
+        end
+        
+        tchar = string.byte(tchar)
 
         wpmd.byte_length = wpmd.byte_length + bit32.lshift(tchar, 17)
-	end	
+    end    
 
     if (bit32.band(wpmd.id, ID_ODD_SIZE) ~= 0) then
         wpmd.id = bit32.band(wpmd.id, bit32.bnot(ID_ODD_SIZE))
         wpmd.byte_length = wpmd.byte_length - 1
-	end	
+    end    
 
     if (wpmd.byte_length == 0 or wpmd.id == ID_WV_BITSTREAM) then
         wpmd.hasdata = false
         return true
-	end	
+    end    
 
     bytes_to_read = wpmd.byte_length + bit32.band(wpmd.byte_length, 1)
     
@@ -1132,41 +1132,41 @@ function read_metadata_buff(wpc, wpmd)
         while (bytes_to_read > wpc.READ_BUFFER_SIZE) do
 
             wpc.read_buffer = wpc.infile:read( wpc.READ_BUFFER_SIZE )
-			if(wpc.read_buffer == nil) then
-				return false
-			end
-			
+            if(wpc.read_buffer == nil) then
+                return false
+            end
+            
             bytes_read = #wpc.read_buffer
             if(bytes_read ~= wpc.READ_BUFFER_SIZE) then
                 return false
-			end	
+            end    
 
             bytes_to_read = bytes_to_read - wpc.READ_BUFFER_SIZE
-		end	
+        end    
     else
         wpmd.hasdata = true
         wpmd.data = wpc.read_buffer
-	end	
+    end    
 
     if (bytes_to_read ~= 0) then
         bytes_read = 0
 
         wpc.read_buffer = wpc.infile:read(bytes_to_read)
-		if(wpc.read_buffer == nil) then
-			wpmd.hasdata = false
-			return false
-		end
-        wpmd.data = wpc.read_buffer
-        bytes_read = #wpc.read_buffer
-		if(bytes_read ~=  bytes_to_read) then
+        if(wpc.read_buffer == nil) then
             wpmd.hasdata = false
             return false
-		end	
+        end
+        wpmd.data = wpc.read_buffer
+        bytes_read = #wpc.read_buffer
+        if(bytes_read ~=  bytes_to_read) then
+            wpmd.hasdata = false
+            return false
+        end    
 
-	end		
+    end        
 
     return true
-end	
+end    
 
 
 function process_metadata(wpc, wpmd) 
@@ -1207,23 +1207,23 @@ function process_metadata(wpc, wpmd)
 
     elseif (wpmd.id == ID_WV_BITSTREAM) then
         return init_wv_bitstream(wpc, wpmd)
-	
-	elseif (wpmd.id == ID_SHAPING_WEIGHTS) then
-        return true	
+    
+    elseif (wpmd.id == ID_SHAPING_WEIGHTS) then
+        return true    
 
-	elseif (wpmd.id == ID_WVC_BITSTREAM) then
-        return true	
+    elseif (wpmd.id == ID_WVC_BITSTREAM) then
+        return true    
 
-	elseif (wpmd.id == ID_WVX_BITSTREAM) then
-        return true			
-	
-	else
+    elseif (wpmd.id == ID_WVX_BITSTREAM) then
+        return true            
+    
+    else
         if (bit32.band(wpmd.id, ID_OPTIONAL_DATA) ~= 0) then
             return true
         else
             return false
-		end
-	end
+        end
+    end
 end
 
 
@@ -1239,7 +1239,7 @@ function unpack_init(wpc)
 
     if (wps.wphdr.block_samples > 0 and wps.wphdr.block_index ~= -1) then
         wps.sample_index = wps.wphdr.block_index
-	end	
+    end    
 
     wps.mute_error = 0
     wps.crc = 0xffffffff
@@ -1250,34 +1250,34 @@ function unpack_init(wpc)
             wpc.error = true
             wpc.error_message = "invalid metadata!"
             return false
-		end	
+        end    
 
         if (wpmd.id == ID_WV_BITSTREAM) then
             break
-		end
-	end	
+        end
+    end    
 
     
     if (wps.wphdr.block_samples ~= 0 and (None == wps.wvbits.file) ) then
         wpc.error_message = "invalid WavPack file!"
         wpc.error = true
         return false
-	end	
+    end    
 
     if (wps.wphdr.block_samples ~= 0) then
         if (bit32.band(wps.wphdr.flags, INT32_DATA) ~= 0 and wps.int32_sent_bits ~= 0) then
             wpc.lossy_blocks = 1
-		end	
+        end    
 
         if (bit32.band(wps.wphdr.flags, FLOAT_DATA) ~= 0 and bit32.band(wps.float_flags, bit32.bor(FLOAT_EXCEPTIONS, FLOAT_ZEROS_SENT, FLOAT_SHIFT_SENT, FLOAT_SHIFT_SAME)) ~= 0) then
             wpc.lossy_blocks = 1
-		end
-	end	
+        end
+    end    
 
     wpc.error = false
     wpc.stream = wps
     return true
-end	
+end    
 
 -- This function initialzes the main bitstream for audio samples, which must
 -- be in the "wv" file.
@@ -1290,7 +1290,7 @@ function init_wv_bitstream(wpc, wpmd)
     elseif (wpmd.byte_length > 0) then
         blen = bit32.band(wpmd.byte_length, 1)
         wps.wvbits = bs_open_read(wpc.read_buffer, -1, #wpc.read_buffer, wpc.infile, (wpmd.byte_length + blen), 1)
-	end
+    end
     return true
 end
 
@@ -1306,11 +1306,11 @@ function read_decorr_terms(wps, wpmd)
     byteptr = wpmd.data
     local tmpwps = WavpackStream:new()
     
-    local counter = 1		--arrays start at 1 in Lua
+    local counter = 1        --arrays start at 1 in Lua
 
     if (termcnt > MAX_NTERMS) then
         return false
-	end	
+    end    
     
     tmpwps.num_terms = termcnt
 
@@ -1324,16 +1324,16 @@ function read_decorr_terms(wps, wpmd)
             or (tmpwps.decorr_passes[dcounter].term > MAX_TERM and tmpwps.decorr_passes[dcounter].term < 17) 
             or tmpwps.decorr_passes[dcounter].term > 18) then
             return false
-		end	
+        end    
 
-	end
-	
+    end
+    
     wps.decorr_passes = tmpwps.decorr_passes
     wps.num_terms = tmpwps.num_terms
 
     return true
 end
-	
+    
 -- Read decorrelation weights from specified metadata block into the
 -- decorr_passes array. The weights range +/-1024, but are rounded and
 -- truncated to fit in signed chars for metadata storage. Weights are
@@ -1345,26 +1345,26 @@ function read_decorr_weights(wps, wpmd)
     local tcount = 0
     local byteptr = wpmd.data
     local dpp = decorr_pass:new()
-    local counter = 1	
+    local counter = 1    
     local dpp_idx = 0
     local myiterator = 0
 
     if (bit32.band(wps.wphdr.flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then
-		termcnt = termcnt / 2
-	end
+        termcnt = termcnt / 2
+    end
 
     if (termcnt > wps.num_terms) then
         return false
-	end	
-	
-	-- need to ensure all weights are reset to 0 before starting
-	for internalc=0,MAX_NTERMS-1,1 do
+    end    
+    
+    -- need to ensure all weights are reset to 0 before starting
+    for internalc=0,MAX_NTERMS-1,1 do
         wps.decorr_passes[internalc].weight_A = 0
         wps.decorr_passes[internalc].weight_B = 0
-	end
+    end
 
     myiterator = wps.num_terms
-	
+    
     while (termcnt > 0) do
         dpp_idx = myiterator - 1
         
@@ -1375,7 +1375,7 @@ function read_decorr_weights(wps, wpmd)
         if bit32.band(signedCalc1, 0x80) == 0x80 then
             signedCalc1 = bit32.band(signedCalc1, 0x7F)
             signedCalc1 = signedCalc1 - 0x80
-		end	
+        end    
                 
         dpp.weight_A = restore_weight(signedCalc1)
 
@@ -1391,25 +1391,25 @@ function read_decorr_weights(wps, wpmd)
             if bit32.band(signedCalc1, 0x80) == 0x80 then
                 signedCalc1 = bit32.band(signedCalc1, 0x7F)
                 signedCalc1 = signedCalc1 - 0x80
-			end
+            end
 
             dpp.weight_B = restore_weight( signedCalc1 )
             counter = counter + 1
-		end	
+        end    
 
         wps.decorr_passes[dpp_idx].weight_B = dpp.weight_B
 
         myiterator = myiterator - 1
         termcnt = termcnt - 1
-	end
-	
+    end
+    
     dpp_idx = dpp_idx - 1
     while dpp_idx >= 0 do
         wps.decorr_passes[dpp_idx].weight_A = 0
         wps.decorr_passes[dpp_idx].weight_B = 0
         dpp_idx = dpp_idx - 1
-	end
-	
+    end
+    
     return true
 end
 
@@ -1431,7 +1431,7 @@ function read_decorr_samples(wps, wpmd)
     local uns_buf2 = 0
     local uns_buf3 = 0
 
-	for tcount = 0, wps.num_terms-1,1 do
+    for tcount = 0, wps.num_terms-1,1 do
         dpp.term = wps.decorr_passes[dpp_index].term
 
         for internalc=0,MAX_TERM-1,1 do
@@ -1439,24 +1439,24 @@ function read_decorr_samples(wps, wpmd)
             dpp.samples_B[internalc] = 0
             wps.decorr_passes[dpp_index].samples_A[internalc] = 0
             wps.decorr_passes[dpp_index].samples_B[internalc] = 0
-		end
-		
+        end
+        
         dpp_index = dpp_index + 1 
-	end
+    end
 
     if (wps.wphdr.version == 0x402 and bit32.band(wps.wphdr.flags, HYBRID_FLAG) ~= 0) then
         counter = counter + 2
 
         if (bit32.band(wps.wphdr.flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then
             counter = counter + 2
-		end
-	end
-	
+        end
+    end
+    
     dpp_index = dpp_index - 1
  
     while (counter <= wpmd.byte_length) do
         if (dpp.term > MAX_TERM) then
-		
+        
             uns_buf0 =  bit32.band(string.byte(byteptr,counter), 0xff)
             uns_buf1 =  bit32.band(string.byte(byteptr,(counter + 1)), 0xff)
             uns_buf2 =  bit32.band(string.byte(byteptr,(counter + 2)), 0xff)
@@ -1470,17 +1470,17 @@ function read_decorr_samples(wps, wpmd)
             if bit32.band(signedCalc1, 0x8000) == 0x8000 then
                 signedCalc1 = bit32.band(signedCalc1, 0x7FFF)
                 signedCalc1 = signedCalc1 - 0x8000
-			end	
+            end    
 
             signedCalc2 = uns_buf2 + bit32.lshift(uns_buf3, 8)
             if bit32.band(signedCalc2, 0x8000) == 0x8000 then
                 signedCalc2 = bit32.band(signedCalc2, 0x7FFF)
                 signedCalc2 = signedCalc2 - 0x8000
-			end	
+            end    
 
             dpp.samples_A[0] = exp2s( signedCalc1 )
             dpp.samples_A[1] = exp2s( signedCalc2 )
-			
+            
             counter = counter + 4
 
             if (bit32.band(wps.wphdr.flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then
@@ -1493,20 +1493,20 @@ function read_decorr_samples(wps, wpmd)
                 if bit32.band(signedCalc1, 0x8000) == 0x8000 then
                     signedCalc1 = bit32.band(signedCalc1, 0x7FFF)
                     signedCalc1 = signedCalc1 - 0x8000
-				end	
+                end    
 
                 signedCalc2 = uns_buf2 + bit32.lshift(uns_buf3, 8)
                 if bit32.band(signedCalc2, 0x8000) == 0x8000 then
                     signedCalc2 = bit32.band(signedCalc2, 0x7FFF)
                     signedCalc2 = signedCalc2 - 0x8000
-				end
-					
+                end
+                    
                 dpp.samples_B[0] = exp2s( signedCalc1 )
                 dpp.samples_B[1] = exp2s( signedCalc2 )
-				
+                
                 counter = counter + 4
-			end
-			
+            end
+            
         elseif (dpp.term < 0) then
             
             uns_buf0 =  bit32.band(string.byte(byteptr,counter), 0xff)
@@ -1518,14 +1518,14 @@ function read_decorr_samples(wps, wpmd)
             if bit32.band(signedCalc1, 0x8000) == 0x8000 then
                 signedCalc1 = bit32.band(signedCalc1, 0x7FFF)
                 signedCalc1 = signedCalc1 - 0x8000
-			end	
+            end    
                 
             signedCalc2 = uns_buf2 + bit32.lshift(uns_buf3, 8)
             if bit32.band(signedCalc2, 0x8000) == 0x8000 then
                 signedCalc2 = bit32.band(signedCalc2, 0x7FFF)
                 signedCalc2 = signedCalc2 - 0x8000
-			end
-			
+            end
+            
             dpp.samples_A[0] = exp2s( signedCalc1 )
             dpp.samples_B[0] = exp2s( signedCalc2 )
 
@@ -1543,7 +1543,7 @@ function read_decorr_samples(wps, wpmd)
                 if bit32.band(signedCalc1, 0x8000) == 0x8000 then
                     signedCalc1 = bit32.band(signedCalc1, 0x7FFF)
                     signedCalc1 = signedCalc1 - 0x8000
-				end	
+                end    
 
                 dpp.samples_A[m] = exp2s(signedCalc1)
                 counter = counter + 2
@@ -1557,23 +1557,23 @@ function read_decorr_samples(wps, wpmd)
                         signedCalc1 = bit32.band(signedCalc1, 0x7FFF)
                         signedCalc1 = signedCalc1 - 0x8000
                     end
-					
+                    
                     dpp.samples_B[m] = exp2s( signedCalc1 )
                     counter = counter + 2
-				end
-				
+                end
+                
                 m = m + 1
                 cnt = cnt - 1
-			end	
-		end
-		
-        for sample_counter=0,MAX_TERM-1,1 do		
+            end    
+        end
+        
+        for sample_counter=0,MAX_TERM-1,1 do        
             wps.decorr_passes[dpp_index].samples_A[sample_counter] = dpp.samples_A[sample_counter]
-            wps.decorr_passes[dpp_index].samples_B[sample_counter] = dpp.samples_B[sample_counter]	
-		end
+            wps.decorr_passes[dpp_index].samples_B[sample_counter] = dpp.samples_B[sample_counter]    
+        end
 
         dpp_index = dpp_index - 1
-	end
+    end
 
     return true
 end
@@ -1591,7 +1591,7 @@ function read_int32_info( wps, wpmd)
 
     if (bytecnt ~= 4) then
         return false
-	end	
+    end    
 
     wps.int32_sent_bits = string.byte(byteptr,counter)
     counter = counter + 1
@@ -1619,7 +1619,7 @@ function read_channel_info(wpc, wpmd)
 
     if (bytecnt == 0 or bytecnt > 5) then
         return false
-	end	
+    end    
 
     wpc.config.num_channels = string.byte(byteptr,counter)
     counter = counter + 1
@@ -1629,7 +1629,7 @@ function read_channel_info(wpc, wpmd)
         counter = counter + 1
         shift = shift + 8
         bytecnt = bytecnt - 1
-	end	
+    end    
 
     wpc.config.channel_mask = mask
     return true
@@ -1650,8 +1650,8 @@ function read_config_info(wpc, wpmd)
         wpc.config.flags = bit32.bor(wpc.config.flags,(bit32.lshift(bit32.band(string.byte(byteptr,counter), 0xFF), 16)))
         counter = counter + 1
         wpc.config.flags = bit32.bor(wpc.config.flags,(bit32.lshift(bit32.band(string.byte(byteptr,counter), 0xFF), 24)))
-	end
-	
+    end
+    
     return true
 end
 
@@ -1667,8 +1667,8 @@ function read_sample_rate(wpc, wpmd)
         counter = counter + 1
         wpc.config.sample_rate = bit32.bor(wpc.config.sample_rate, bit32.lshift(bit32.band(string.byte(byteptr,counter), 0xFF), 8))
         counter = counter + 1
-		wpc.config.sample_rate = bit32.bor(wpc.config.sample_rate, bit32.lshift(bit32.band(string.byte(byteptr,counter), 0xFF), 16))
-	end	
+        wpc.config.sample_rate = bit32.bor(wpc.config.sample_rate, bit32.lshift(bit32.band(string.byte(byteptr,counter), 0xFF), 16))
+    end    
     
     return true
 end
@@ -1694,16 +1694,17 @@ function unpack_samples(wpc, mybuffer, sample_count)
     local flags = wps.wphdr.flags
     local i = 0
     crc = wps.crc
-    mute_limit = (bit32.lshift(1, bit32.rshift(bit32.band(flags, MAG_MASK), MAG_LSB)) + 2)	
+    mute_limit = (bit32.lshift(1, bit32.rshift(bit32.band(flags, MAG_MASK), MAG_LSB)) + 2)    
     dpp = decorr_pass:new()
     tcount = 0
     local buffer_counter = 0
-	
+    local byte_count = wpc.config.bytes_per_sample
+    
     samples_processed = 0
 
     if (wps.sample_index + sample_count > wps.wphdr.block_index + wps.wphdr.block_samples) then
         sample_count = wps.wphdr.block_index + wps.wphdr.block_samples - wps.sample_index
-	end	
+    end    
 
     if (wps.mute_error > 0) then
         tempc = 0
@@ -1712,22 +1713,22 @@ function unpack_samples(wpc, mybuffer, sample_count)
             tempc = sample_count
         else 
             tempc = 2 * sample_count
-		end	
+        end    
 
         while (tempc > 0) do
             mybuffer[buffer_counter] = 0
             tempc = tempc - 1
             buffer_counter = buffer_counter + 1
-		end	
+        end    
 
         wps.sample_index = wps.sample_index + sample_count
 
         return sample_count
-	end	
+    end    
 
     if (bit32.band(flags, HYBRID_FLAG) ~= 0) then
         mute_limit = mute_limit * 2
-	end	
+    end    
 
 
     -- ///////////////////// handle version 4 mono data /////////////////////////
@@ -1735,13 +1736,22 @@ function unpack_samples(wpc, mybuffer, sample_count)
     if (bit32.band(flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) ~= 0) then
         dpp_index = 0
 
-        i = get_words(sample_count, flags, wps.w, wps.wvbits, mybuffer)	
+        i = get_words(sample_count, flags, wps.w, wps.wvbits, mybuffer)    
 
-        for tcount = 0, wps.num_terms-1, 1 do
-            dpp = wps.decorr_passes[dpp_index]
-            decorr_mono_pass(dpp, mybuffer, sample_count, buffer_counter)
-            dpp_index = dpp_index + 1
-		end	
+        if(byte_count>2) then
+            for tcount = 0, wps.num_terms-1, 1 do
+                dpp = wps.decorr_passes[dpp_index]
+                decorr_mono_pass_24bit(dpp, mybuffer, sample_count, buffer_counter)
+                dpp_index = dpp_index + 1
+            end
+        else
+            for tcount = 0, wps.num_terms-1, 1 do
+                dpp = wps.decorr_passes[dpp_index]
+                decorr_mono_pass(dpp, mybuffer, sample_count, buffer_counter)
+                dpp_index = dpp_index + 1
+            end
+        end
+                
 
         bf_abs = 0
 
@@ -1750,17 +1760,17 @@ function unpack_samples(wpc, mybuffer, sample_count)
                 bf_abs = -mybuffer[q]
             else
                 bf_abs = mybuffer[q]
-			end	
+            end    
 
             if (bf_abs > mute_limit) then
-                i = q			
+                i = q            
                 break
-			end	
+            end    
             
             crcstep1 = bit32.band((crc * 3), 0xffffffff)
-            crc = bit32.band((crcstep1 + mybuffer[q]), 0xffffffff)	
+            crc = bit32.band((crcstep1 + mybuffer[q]), 0xffffffff)    
  
-		end	
+        end    
 
     -- //////////////////// handle version 4 stereo data ////////////////////////
 
@@ -1771,59 +1781,78 @@ function unpack_samples(wpc, mybuffer, sample_count)
 
         if (sample_count < 16) then 
             dpp_index = 0
-			
-            for tcount = 0, wps.num_terms-1, 1 do
-                dpp = wps.decorr_passes[dpp_index]				
-                decorr_stereo_pass(dpp, mybuffer, sample_count, buffer_counter)
-                wps.decorr_passes[dpp_index] = dpp
-                dpp_index = dpp_index + 1
-			end	
+            
+            if(byte_count>2) then
+                for tcount = 0, wps.num_terms-1, 1 do
+                    dpp = wps.decorr_passes[dpp_index]                
+                    decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buffer_counter)
+                    wps.decorr_passes[dpp_index] = dpp
+                    dpp_index = dpp_index + 1
+                end
+            else
+                for tcount = 0, wps.num_terms-1, 1 do
+                    dpp = wps.decorr_passes[dpp_index]                
+                    decorr_stereo_pass(dpp, mybuffer, sample_count, buffer_counter)
+                    wps.decorr_passes[dpp_index] = dpp
+                    dpp_index = dpp_index + 1
+                end            
+            end
         else
             dpp_index = 0
 
-			for tcount = 0, wps.num_terms-1, 1 do
+            if(byte_count>2) then
+                for tcount = 0, wps.num_terms-1, 1 do
+                    dpp = wps.decorr_passes[dpp_index]
+                    decorr_stereo_pass_24bit(dpp, mybuffer, 8, buffer_counter)                
+                    decorr_stereo_pass_cont_24bit(dpp, mybuffer, sample_count - 8, buffer_counter + 16)                
+                    wps.decorr_passes[dpp_index] = dpp
 
-                dpp = wps.decorr_passes[dpp_index]
-                decorr_stereo_pass(dpp, mybuffer, 8, buffer_counter)				
-                decorr_stereo_pass_cont(dpp, mybuffer, sample_count - 8, buffer_counter + 16)				
-                wps.decorr_passes[dpp_index] = dpp
+                    dpp_index = dpp_index + 1
+                end
+            else
+                for tcount = 0, wps.num_terms-1, 1 do
+                    dpp = wps.decorr_passes[dpp_index]
+                    decorr_stereo_pass(dpp, mybuffer, 8, buffer_counter)                
+                    decorr_stereo_pass_cont(dpp, mybuffer, sample_count - 8, buffer_counter + 16)                
+                    wps.decorr_passes[dpp_index] = dpp
 
-                dpp_index = dpp_index + 1
-			end
-		end		
+                    dpp_index = dpp_index + 1
+                end            
+            end
+        end        
 
-        if (bit32.band(flags, JOINT_STEREO) ~= 0) then		
+        if (bit32.band(flags, JOINT_STEREO) ~= 0) then        
             bf_abs = 0
             bf1_abs = 0
 
             for buffer_counter = 0,(sample_count * 2)-1,2 do
 
-				mybuffer[buffer_counter + 1] = mybuffer[buffer_counter + 1] - signed_rshift(mybuffer[buffer_counter], 1)
+                mybuffer[buffer_counter + 1] = mybuffer[buffer_counter + 1] - signed_rshift(mybuffer[buffer_counter], 1)
                 mybuffer[buffer_counter] = mybuffer[buffer_counter] + mybuffer[buffer_counter + 1]
 
                 if mybuffer[buffer_counter] < 0 then
                     bf_abs = -mybuffer[buffer_counter]
                 else 
                     bf_abs = mybuffer[buffer_counter]
-				end	
+                end    
                 
                 if mybuffer[buffer_counter + 1] < 0 then
                     bf1_abs = -mybuffer[buffer_counter + 1]
                 else
                     bf1_abs = mybuffer[buffer_counter + 1]
-				end	
+                end    
 
-                if (bf_abs > mute_limit or bf1_abs > mute_limit) then				
+                if (bf_abs > mute_limit or bf1_abs > mute_limit) then                
                     i = buffer_counter / 2
                     break
-				end	
+                end    
 
                 crcstep1 = bit32.band((crc * 3), 0xffffffff)
                 crcstep2 = bit32.band((crcstep1 + mybuffer[buffer_counter]), 0xffffffff)
                 crcstep3 = bit32.band((crcstep2 * 3), 0xffffffff)
 
                 crc = bit32.band((crcstep3 + mybuffer[buffer_counter + 1] ), 0xffffffff)
-			end				
+            end                
         else
             bf_abs = 0
             bf1_abs = 0
@@ -1833,28 +1862,28 @@ function unpack_samples(wpc, mybuffer, sample_count)
                     bf_abs = -mybuffer[buffer_counter]
                 else
                     bf_abs = mybuffer[buffer_counter]
-				end	
+                end    
                     
                 if mybuffer[buffer_counter + 1] < 0 then
                     bf1_abs = -mybuffer[buffer_counter + 1]
                 else
                     bf1_abs = mybuffer[buffer_counter + 1]
-				end	
+                end    
 
-                if (bf_abs > mute_limit or bf1_abs > mute_limit) then					
+                if (bf_abs > mute_limit or bf1_abs > mute_limit) then                    
                     i = buffer_counter / 2
                     break
-				end	
+                end    
 
                 crcstep1 = bit32.band((crc * 3), 0xffffffff)
                 crcstep2 = bit32.band((crcstep1 + mybuffer[buffer_counter]), 0xffffffff)
                 crcstep3 = bit32.band((crcstep2 * 3), 0xffffffff)
 
                 crc = bit32.band((crcstep3 + mybuffer[buffer_counter + 1] ), 0xffffffff)
-			end			
-		end	
-	end
-	
+            end            
+        end    
+    end
+    
     if (i ~= sample_count) then
         sc = 0
        
@@ -1862,19 +1891,19 @@ function unpack_samples(wpc, mybuffer, sample_count)
             sc = sample_count
         else
             sc = 2 * sample_count
-		end	
+        end    
             
         buffer_counter = 0
 
-        while (sc > 0) do		
+        while (sc > 0) do        
             mybuffer[buffer_counter] = 0
             sc = sc -1
             buffer_counter = buffer_counter + 1
-		end	
+        end    
 
         wps.mute_error = 1
         i = sample_count
-	end	
+    end    
 
     mybuffer = fixup_samples(wps, mybuffer, i)
 
@@ -1893,8 +1922,8 @@ function unpack_samples(wpc, mybuffer, sample_count)
             dest_idx = dest_idx - 1
             src_idx = src_idx - 1
             c = c -1
-		end
-	end	
+        end
+    end    
 
     wps.sample_index = wps.sample_index + i
     wps.crc = crc
@@ -1904,61 +1933,70 @@ end
 
 
 function signed_rshift(val, shift)
-	if(val>=0) then
-		return (bit32.rshift(val,shift))
-	else
-		local iterator = bit32.bnot(math.abs(val)) + 1
-		local leftmostbit = 0x80000000	-- in 32 bits, this is the leftmost bit
-		-- when right shifting a negative number, you want the leftmost bit to always be set
-		-- so instead of one shift, we do a series of right shifts, each time setting the leftmost bit
-		for i=1, shift,1 do
-			iterator = bit32.bor(bit32.rshift(iterator,1), leftmostbit)
-		end
-		return (iterator - (2^32))
-	end
+    local rshift = bit32.rshift
+    local bor = bit32.bor
+    
+    if(val>=0) then
+        return (rshift(val,shift))
+    else
+        local iterator = bit32.bnot(math.abs(val)) + 1
+        local leftmostbit = 0x80000000    -- in 32 bits, this is the leftmost bit
+        -- when right shifting a negative number, you want the leftmost bit to always be set
+        -- so instead of one shift, we do a series of right shifts, each time setting the leftmost bit
+        if(shift == 10) then
+            iterator = bor(rshift(iterator,10),0xFFC00000)
+        elseif(shift == 9) then
+            iterator = bor(rshift(iterator,9),0xFF800000)
+        else
+            for i=1, shift,1 do
+                iterator = bor(rshift(iterator,1), leftmostbit)
+            end
+        end
+
+        return (iterator - 4294967296)        -- 2^32
+    end
 end
 
 function signed_xor(val1, val2)
-	local neg_present = false
+    local neg_present = false
 
-	if(val1<0 or val2<0) then
-		neg_present = true
-	end
-	if(neg_present == true and val1<0 and val2<0) then
-		neg_present = false
-	end
-	
-	if(neg_present==false) then
-		return(bit32.bxor(val1,val2))
-	else
-		local xor_result = bit32.bxor(val1,val2)
-		return (xor_result - (2^32))
-	end
-	
+    if(val1<0 or val2<0) then
+        if(val1<0 and val2<0) then
+            -- double negative is a positive in this case
+            return(bit32.bxor(val1,val2))
+        else
+            local xor_result = bit32.bxor(val1,val2)
+            return (xor_result - 4294967296)    -- 2^32
+        end
+    end
+
+    -- both positive
+    return(bit32.bxor(val1,val2))
+    
 end
 
 function signed_lshift(val, shift)
-	if(val<0) then
-		result = -bit32.lshift(-val,shift)
-	else	
-		result = bit32.lshift(val,shift)
-	end
-	return result
-end	
+    if(val<0) then
+        result = -bit32.lshift(-val,shift)
+    else    
+        result = bit32.lshift(val,shift)
+    end
+    return result
+end    
 
 -- This is a help routine for apply weight. It works with negative and postive numbers
 
 function apply_weight_helper(sample)
-	local result = 0
-	
-	if(sample>=0) then
-		result = bit32.rshift(bit32.band(sample, 0xFFFF0000), 9)
-	else	
-		local res1 = bit32.band(sample, 0xFFFF0000) - (2^32)
-		result = signed_rshift(res1, 9)
-	end
-	
-	return(result)
+    local result = 0
+    
+    if(sample>=0) then
+        result = bit32.rshift(bit32.band(sample, 0xFFFF0000), 9)
+    else    
+        local res1 = bit32.band(sample, 0xFFFF0000) - 4294967296    -- 2^32
+        result = signed_rshift(res1, 9)
+    end
+    
+    return(result)
 end
 
 function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx) 
@@ -1970,213 +2008,203 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
     m = 0
     k = 0
     bptr_counter = 0
-	local end_index = (buf_idx + sample_count * 2)-1
-	
+    local end_index = (buf_idx + sample_count * 2)-1
+    
     if(dpp.term == 17) then
-        for bptr_counter = buf_idx, end_index, 2 do		
+        for bptr_counter = buf_idx, end_index, 2 do        
             sam_A = 2 * dpp.samples_A[0] - dpp.samples_A[1]
             dpp.samples_A[1] = dpp.samples_A[0]
-            --dpp.samples_A[0] =  signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
-			dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
-
-            if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then	
+            dpp.samples_A[0] =  signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            
+            if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then    
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                 else
                     weight_A = weight_A + delta
-				end
-			end
+                end
+            end
 
             mybuffer[bptr_counter] = dpp.samples_A[0]
-					
+                    
             sam_A = 2 * dpp.samples_B[0] - dpp.samples_B[1]
             dpp.samples_B[1] = dpp.samples_B[0]
 
-            --dpp.samples_B[0] =  signed_rshift((weight_B *sam_A + 512), 10) + mybuffer[bptr_counter + 1]
-			dpp.samples_B[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
-
+            dpp.samples_B[0] =  signed_rshift((weight_B *sam_A + 512), 10) + mybuffer[bptr_counter + 1]
+            
             if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0) then
-                if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then			
+                if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then            
                     weight_B = weight_B - delta
                 else
                     weight_B = weight_B + delta
-				end
-			end
+                end
+            end
 
             mybuffer[bptr_counter + 1] = dpp.samples_B[0]
-		end
+        end
     elseif(dpp.term == 18) then 
-        for bptr_counter = buf_idx, end_index, 2 do	
+        for bptr_counter = buf_idx, end_index, 2 do    
             sam_A = signed_rshift((3 * dpp.samples_A[0] - dpp.samples_A[1]), 1)
-            dpp.samples_A[1] = dpp.samples_A[0]		
-            --dpp.samples_A[0] =  signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
-			dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
-			
+            dpp.samples_A[1] = dpp.samples_A[0]        
+            dpp.samples_A[0] =  signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            
             if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                 else
                     weight_A = weight_A + delta
-				end
-			end
+                end
+            end
 
             mybuffer[bptr_counter] = dpp.samples_A[0]
 
             sam_A = signed_rshift((3 * dpp.samples_B[0] - dpp.samples_B[1]), 1)
             dpp.samples_B[1] = dpp.samples_B[0]
-            --dpp.samples_B[0] = signed_rshift((weight_B * sam_A + 512), 10) + mybuffer[bptr_counter + 1]
-			dpp.samples_B[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
-
+            dpp.samples_B[0] = signed_rshift((weight_B * sam_A + 512), 10) + mybuffer[bptr_counter + 1]
+            
             if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
                     weight_B = weight_B - delta
                 else
                     weight_B = weight_B + delta
-				end
-			end
+                end
+            end
 
             mybuffer[bptr_counter + 1] = dpp.samples_B[0]
-		end
-		
+        end
+        
     elseif(dpp.term == -1) then
         for bptr_counter = buf_idx, end_index, 2 do
-            --sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
-			sam_A = signed_rshift(( signed_rshift((bit32.band(dpp.samples_A[0], 0xffff) * weight_A), 9) + ( apply_weight_helper(dpp.samples_A[0]) * weight_A) + 1), 1) + mybuffer[bptr_counter]
-
+            sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
+            
             if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
                 if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
-					end
-				end
+                    end
+                end
             else
                 if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
-					end
-				end
-			end
+                    end
+                end
+            end
 
             mybuffer[bptr_counter] = sam_A
-            --dpp.samples_A[0] = mybuffer[bptr_counter + 1] +  signed_rshift((weight_B * sam_A + 512), 10)
-			dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
-
+            dpp.samples_A[0] = mybuffer[bptr_counter + 1] +  signed_rshift((weight_B * sam_A + 512), 10)
+            
             if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
                 if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
-					end
-				end
+                    end
+                end
             else
                 if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
-					end
-				end
-			end
+                    end
+                end
+            end
 
             mybuffer[bptr_counter + 1] = dpp.samples_A[0]
-		end
-		
+        end
+        
     elseif(dpp.term == -2) then
         sam_B = 0
         sam_A = 0
 
         for bptr_counter = buf_idx, end_index, 2 do
-            --sam_B = mybuffer[bptr_counter + 1] + signed_rshift((weight_B * dpp.samples_B[0] + 512), 10)
-			sam_B = signed_rshift(( signed_rshift((bit32.band(dpp.samples_B[0], 0xffff) * weight_B), 9) + ( apply_weight_helper(dpp.samples_B[0]) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
-
+            sam_B = mybuffer[bptr_counter + 1] + signed_rshift((weight_B * dpp.samples_B[0] + 512), 10)
+            
             if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
                 if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
-					end
-				end	
+                    end
+                end    
             else 
                 if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
-					end
-				end
-			end
+                    end
+                end
+            end
 
             mybuffer[bptr_counter + 1] = sam_B
 
-            --dpp.samples_B[0] = mybuffer[bptr_counter] + signed_rshift((weight_A * sam_B + 512), 10)
-			dpp.samples_B[0] = signed_rshift(( signed_rshift((bit32.band(sam_B, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_B) * weight_A) + 1), 1) + mybuffer[bptr_counter]
-
+            dpp.samples_B[0] = mybuffer[bptr_counter] + signed_rshift((weight_A * sam_B + 512), 10)
+            
             if (signed_xor(sam_B, mybuffer[bptr_counter]) < 0) then
                 if (sam_B ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
-					end
-				end
+                    end
+                end
             else 
                 if (sam_B ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
-					end	
-				end
-			end
-			
+                    end    
+                end
+            end
+            
             mybuffer[bptr_counter] = dpp.samples_B[0]
-		end
+        end
 
     elseif(dpp.term == -3) then
         sam_A = 0
 
         for bptr_counter = buf_idx, end_index, 2 do
-            --sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
-			sam_A = signed_rshift(( signed_rshift((bit32.band(dpp.samples_A[0], 0xffff) * weight_A), 9) + ( apply_weight_helper(dpp.samples_A[0]) * weight_A) + 1), 1) + mybuffer[bptr_counter]
-
+            sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
+            
             if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
                 if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
-					end
-				end	
+                    end
+                end    
             else 
                 if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
-					end
-				end
-			end
+                    end
+                end
+            end
 
-            --sam_B = mybuffer[bptr_counter + 1] + signed_rshift((weight_B * dpp.samples_B[0] + 512), 10)
-			sam_B = signed_rshift(( signed_rshift((bit32.band(dpp.samples_B[0], 0xffff) * weight_B), 9) + ( apply_weight_helper(dpp.samples_B[0]) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
-
+            sam_B = mybuffer[bptr_counter + 1] + signed_rshift((weight_B * dpp.samples_B[0] + 512), 10)
+            
             if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
                 if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
-					end
-				end
+                    end
+                end
             else 
                 if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
-					end
-				end
-			end
+                    end
+                end
+            end
 
-			dpp.samples_B[0] = sam_A
+            dpp.samples_B[0] = sam_A
             mybuffer[bptr_counter] = sam_A
-			dpp.samples_A[0] = sam_B
+            dpp.samples_A[0] = sam_B
             mybuffer[bptr_counter + 1] = sam_B
-		end	
+        end    
 
     else
 
@@ -2186,65 +2214,333 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
 
         for bptr_counter = buf_idx, end_index, 2 do
             sam_A = dpp.samples_A[m]
-            --dpp.samples_A[k] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
-			dpp.samples_A[k] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
-
+            dpp.samples_A[k] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            
             if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                 else 
                     weight_A = weight_A + delta
-				end
-			end
+                end
+            end
 
             mybuffer[bptr_counter] = dpp.samples_A[k]
 
             sam_A = dpp.samples_B[m]
-	
-            --dpp.samples_B[k] = signed_rshift((weight_B * sam_A + 512), 10) + mybuffer[bptr_counter + 1]
-			dpp.samples_B[k] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
-   
+    
+            dpp.samples_B[k] = signed_rshift((weight_B * sam_A + 512), 10) + mybuffer[bptr_counter + 1]
+           
             if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
                     weight_B = weight_B - delta
                 else
                     weight_B = weight_B + delta
-				end
-			end
+                end
+            end
 
             mybuffer[bptr_counter + 1] = dpp.samples_B[k]
 
             m = bit32.band((m + 1), (MAX_TERM - 1))
             k = bit32.band((k + 1), (MAX_TERM - 1))
-		end	
+        end    
 
         if (m ~= 0) then
             temp_samples = {}
 
             for t = 0, #dpp.samples_A,1 do
                 temp_samples[t] = dpp.samples_A[t]
-			end
-			
+            end
+            
             for k = 0,MAX_TERM-1,1 do
                 dpp.samples_A[k] = temp_samples[bit32.band(m, (MAX_TERM - 1))]
                 m = m + 1
-			end
-			
+            end
+            
             for tmpiter = 0,MAX_TERM-1,1 do
                 temp_samples[tmpiter] = dpp.samples_B[tmpiter]
-			end
-			
+            end
+            
             for k = 0,MAX_TERM-1,1 do
                 dpp.samples_B[k] = temp_samples[bit32.band(m, (MAX_TERM - 1))]
                 m = m + 1
-			end	
-		end
-	end
-				
+            end    
+        end
+    end
+                
     dpp.weight_A =  weight_A
     dpp.weight_B =  weight_B
 end
 
+function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx) 
+    delta = dpp.delta
+    weight_A = dpp.weight_A
+    weight_B = dpp.weight_B
+    sam_A = 0
+    sam_B = 0
+    m = 0
+    k = 0
+    bptr_counter = 0
+    local end_index = (buf_idx + sample_count * 2)-1
+    
+    if(dpp.term == 17) then
+        for bptr_counter = buf_idx, end_index, 2 do        
+            sam_A = 2 * dpp.samples_A[0] - dpp.samples_A[1]
+            dpp.samples_A[1] = dpp.samples_A[0]
+            dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
+
+            if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then    
+                if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
+                    weight_A = weight_A - delta
+                else
+                    weight_A = weight_A + delta
+                end
+            end
+
+            mybuffer[bptr_counter] = dpp.samples_A[0]
+                    
+            sam_A = 2 * dpp.samples_B[0] - dpp.samples_B[1]
+            dpp.samples_B[1] = dpp.samples_B[0]
+            dpp.samples_B[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
+
+            if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0) then
+                if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then            
+                    weight_B = weight_B - delta
+                else
+                    weight_B = weight_B + delta
+                end
+            end
+
+            mybuffer[bptr_counter + 1] = dpp.samples_B[0]
+        end
+    elseif(dpp.term == 18) then 
+        for bptr_counter = buf_idx, end_index, 2 do    
+            sam_A = signed_rshift((3 * dpp.samples_A[0] - dpp.samples_A[1]), 1)
+            dpp.samples_A[1] = dpp.samples_A[0]        
+            dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
+            
+            if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
+                if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
+                    weight_A = weight_A - delta
+                else
+                    weight_A = weight_A + delta
+                end
+            end
+
+            mybuffer[bptr_counter] = dpp.samples_A[0]
+
+            sam_A = signed_rshift((3 * dpp.samples_B[0] - dpp.samples_B[1]), 1)
+            dpp.samples_B[1] = dpp.samples_B[0]
+            dpp.samples_B[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
+
+            if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0) then
+                if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
+                    weight_B = weight_B - delta
+                else
+                    weight_B = weight_B + delta
+                end
+            end
+
+            mybuffer[bptr_counter + 1] = dpp.samples_B[0]
+        end
+        
+    elseif(dpp.term == -1) then
+        for bptr_counter = buf_idx, end_index, 2 do
+            sam_A = signed_rshift(( signed_rshift((bit32.band(dpp.samples_A[0], 0xffff) * weight_A), 9) + ( apply_weight_helper(dpp.samples_A[0]) * weight_A) + 1), 1) + mybuffer[bptr_counter]
+
+            if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
+                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                    weight_A = weight_A - delta
+                    if weight_A < -1024 then
+                        weight_A = -1024
+                    end
+                end
+            else
+                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                    weight_A = weight_A + delta
+                    if weight_A > 1024 then
+                        weight_A = 1024
+                    end
+                end
+            end
+
+            mybuffer[bptr_counter] = sam_A
+            dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
+
+            if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
+                if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                    weight_B = weight_B - delta
+                    if weight_B < -1024 then
+                        weight_B = -1024
+                    end
+                end
+            else
+                if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                    weight_B = weight_B + delta
+                    if weight_B > 1024 then
+                        weight_B = 1024
+                    end
+                end
+            end
+
+            mybuffer[bptr_counter + 1] = dpp.samples_A[0]
+        end
+        
+    elseif(dpp.term == -2) then
+        sam_B = 0
+        sam_A = 0
+
+        for bptr_counter = buf_idx, end_index, 2 do
+            sam_B = signed_rshift(( signed_rshift((bit32.band(dpp.samples_B[0], 0xffff) * weight_B), 9) + ( apply_weight_helper(dpp.samples_B[0]) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
+
+            if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
+                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                    weight_B = weight_B - delta
+                    if weight_B < -1024 then
+                        weight_B = -1024
+                    end
+                end    
+            else 
+                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                    weight_B = weight_B + delta
+                    if weight_B > 1024 then
+                        weight_B = 1024
+                    end
+                end
+            end
+
+            mybuffer[bptr_counter + 1] = sam_B
+
+            dpp.samples_B[0] = signed_rshift(( signed_rshift((bit32.band(sam_B, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_B) * weight_A) + 1), 1) + mybuffer[bptr_counter]
+
+            if (signed_xor(sam_B, mybuffer[bptr_counter]) < 0) then
+                if (sam_B ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                    weight_A = weight_A - delta
+                    if weight_A < -1024 then
+                        weight_A = -1024
+                    end
+                end
+            else 
+                if (sam_B ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                    weight_A = weight_A + delta
+                    if weight_A > 1024 then
+                        weight_A = 1024
+                    end    
+                end
+            end
+            
+            mybuffer[bptr_counter] = dpp.samples_B[0]
+        end
+
+    elseif(dpp.term == -3) then
+        sam_A = 0
+
+        for bptr_counter = buf_idx, end_index, 2 do
+            sam_A = signed_rshift(( signed_rshift((bit32.band(dpp.samples_A[0], 0xffff) * weight_A), 9) + ( apply_weight_helper(dpp.samples_A[0]) * weight_A) + 1), 1) + mybuffer[bptr_counter]
+
+            if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
+                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                    weight_A = weight_A - delta
+                    if weight_A < -1024 then
+                        weight_A = -1024
+                    end
+                end    
+            else 
+                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                    weight_A = weight_A + delta
+                    if weight_A > 1024 then
+                        weight_A = 1024
+                    end
+                end
+            end
+
+            sam_B = signed_rshift(( signed_rshift((bit32.band(dpp.samples_B[0], 0xffff) * weight_B), 9) + ( apply_weight_helper(dpp.samples_B[0]) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
+
+            if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
+                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                    weight_B = weight_B - delta
+                    if weight_B < -1024 then
+                        weight_B = -1024
+                    end
+                end
+            else 
+                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                    weight_B = weight_B + delta
+                    if weight_B > 1024 then
+                        weight_B = 1024
+                    end
+                end
+            end
+
+            dpp.samples_B[0] = sam_A
+            mybuffer[bptr_counter] = sam_A
+            dpp.samples_A[0] = sam_B
+            mybuffer[bptr_counter + 1] = sam_B
+        end    
+
+    else
+
+        sam_A = 0
+        m = 0
+        k = bit32.band(dpp.term, (MAX_TERM - 1))
+
+        for bptr_counter = buf_idx, end_index, 2 do
+            sam_A = dpp.samples_A[m]
+            dpp.samples_A[k] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
+
+            if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
+                if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
+                    weight_A = weight_A - delta
+                else 
+                    weight_A = weight_A + delta
+                end
+            end
+
+            mybuffer[bptr_counter] = dpp.samples_A[k]
+
+            sam_A = dpp.samples_B[m]
+    
+            dpp.samples_B[k] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
+   
+            if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0) then
+                if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
+                    weight_B = weight_B - delta
+                else
+                    weight_B = weight_B + delta
+                end
+            end
+
+            mybuffer[bptr_counter + 1] = dpp.samples_B[k]
+
+            m = bit32.band((m + 1), (MAX_TERM - 1))
+            k = bit32.band((k + 1), (MAX_TERM - 1))
+        end    
+
+        if (m ~= 0) then
+            temp_samples = {}
+
+            for t = 0, #dpp.samples_A,1 do
+                temp_samples[t] = dpp.samples_A[t]
+            end
+            
+            for k = 0,MAX_TERM-1,1 do
+                dpp.samples_A[k] = temp_samples[bit32.band(m, (MAX_TERM - 1))]
+                m = m + 1
+            end
+            
+            for tmpiter = 0,MAX_TERM-1,1 do
+                temp_samples[tmpiter] = dpp.samples_B[tmpiter]
+            end
+            
+            for k = 0,MAX_TERM-1,1 do
+                dpp.samples_B[k] = temp_samples[bit32.band(m, (MAX_TERM - 1))]
+                m = m + 1
+            end    
+        end
+    end
+                
+    dpp.weight_A =  weight_A
+    dpp.weight_B =  weight_B
+end
 
 function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx) 
     local delta = dpp.delta
@@ -2263,32 +2559,30 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
             sam_A = 2 * mybuffer[buffer_index - 2] - mybuffer[buffer_index - 4]
 
             sam_B = mybuffer[buffer_index]
-            --mybuffer[buffer_index] = signed_rshift((weight_A *  sam_A + 512), 10) + sam_B
-			mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + sam_B
-
+            mybuffer[buffer_index] = signed_rshift((weight_A *  sam_A + 512), 10) + sam_B
+            
             if (sam_A ~= 0 and sam_B ~= 0) then
                 if signed_xor(sam_A, sam_B) < 0 then
                     weight_A = weight_A - delta 
                 else
                     weight_A = weight_A + delta
-				end
-			end
+                end
+            end
 
             sam_A = 2 * mybuffer[buffer_index - 1] - mybuffer[buffer_index - 3]
             sam_B = mybuffer[buffer_index + 1]
-            --mybuffer[buffer_index + 1] = signed_rshift((weight_B * sam_A + 512), 10) + sam_B
-			mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + sam_B
-
+            mybuffer[buffer_index + 1] = signed_rshift((weight_B * sam_A + 512), 10) + sam_B
+            
             if (sam_A ~= 0 and sam_B ~= 0) then 
                 if signed_xor(sam_A, sam_B) < 0 then
                     weight_B = weight_B - delta 
                 else
                     weight_B = weight_B + delta
-				end
-			end	
+                end
+            end    
             
-		end
-		
+        end
+        
         buffer_index = end_index + 1
         
         dpp.samples_B[0] = mybuffer[buffer_index - 1]
@@ -2296,35 +2590,33 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
         dpp.samples_B[1] = mybuffer[buffer_index - 3]
         dpp.samples_A[1] = mybuffer[buffer_index - 4]
 
-	elseif(dpp.term == 18) then
+    elseif(dpp.term == 18) then
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = signed_rshift((3 * mybuffer[buffer_index - 2] - mybuffer[buffer_index - 4]), 1)
             sam_B = mybuffer[buffer_index]
-            --mybuffer[buffer_index] = signed_rshift((weight_A * sam_A + 512), 10) + sam_B
-			mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + sam_B
-
+            mybuffer[buffer_index] = signed_rshift((weight_A * sam_A + 512), 10) + sam_B
+            
             if (sam_A ~= 0 and sam_B ~= 0) then 
                 if signed_xor(sam_A, sam_B) < 0 then
                     weight_A = weight_A - delta 
                 else
                     weight_A = weight_A + delta
-				end
-			end
+                end
+            end
 
 
             sam_A = signed_rshift((3 * mybuffer[buffer_index - 1] - mybuffer[buffer_index - 3]), 1)
             sam_B = mybuffer[buffer_index + 1]
-            --mybuffer[buffer_index + 1] = signed_rshift((weight_B * sam_A + 512), 10) + sam_B
-			mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + sam_B
-
+            mybuffer[buffer_index + 1] = signed_rshift((weight_B * sam_A + 512), 10) + sam_B
+            
             if (sam_A ~= 0 and sam_B ~= 0) then 
                 if signed_xor(sam_A, sam_B) < 0 then
                     weight_B = weight_B - delta 
                 else 
                     weight_B = weight_B + delta
-				end
-			end
-		end	
+                end
+            end
+        end    
 
         buffer_index = end_index + 1
 
@@ -2333,147 +2625,141 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
         dpp.samples_B[1] = mybuffer[buffer_index - 3]
         dpp.samples_A[1] = mybuffer[buffer_index - 4]
 
-	elseif(dpp.term == -1) then
+    elseif(dpp.term == -1) then
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = mybuffer[buffer_index]
 
-            --mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index - 1] + 512), 10) + sam_A
-			mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 1], 0xffff) * weight_A), 9) + ( apply_weight_helper(mybuffer[buffer_index - 1]) * weight_A) + 1), 1) + sam_A
-
+            mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index - 1] + 512), 10) + sam_A
+            
             if (signed_xor(mybuffer[buffer_index - 1], sam_A) < 0) then
                 if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
-					end
-				end	
+                    end
+                end    
             else
                 if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
                     weight_A = weight_A + delta
                     if (weight_A > 1024) then
                         weight_A = 1024
-					end
-				end
-			end
-			
+                    end
+                end
+            end
+            
             sam_A = mybuffer[buffer_index + 1]
-			--mybuffer[buffer_index + 1] = signed_rshift((weight_B *  mybuffer[buffer_index] + 512), 10) + sam_A
-			mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index], 0xffff) * weight_B), 9) + ( apply_weight_helper(mybuffer[buffer_index]) * weight_B) + 1), 1) + sam_A
-
+            mybuffer[buffer_index + 1] = signed_rshift((weight_B *  mybuffer[buffer_index] + 512), 10) + sam_A
+            
             if (signed_xor(mybuffer[buffer_index], sam_A) < 0) then
                 if (mybuffer[buffer_index] ~= 0 and sam_A ~= 0 ) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
-					end
-				end
+                    end
+                end
             else
                 if (mybuffer[buffer_index] ~= 0 and sam_A ~= 0 ) then
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
-					end
-				end
-			end
-		end
-		
+                    end
+                end
+            end
+        end
+        
         buffer_index = end_index + 1
         
         dpp.samples_A[0] = mybuffer[buffer_index - 1]
 
-	elseif(dpp.term == -2) then
+    elseif(dpp.term == -2) then
         sam_A = 0
         sam_B = 0
 
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = mybuffer[buffer_index + 1]
-            --mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[buffer_index - 2] + 512), 10) + sam_A
-			mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 2], 0xffff) * weight_B), 9) + ( apply_weight_helper(mybuffer[buffer_index - 2]) * weight_B) + 1), 1) + sam_A
-
+            mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[buffer_index - 2] + 512), 10) + sam_A
+            
             if (signed_xor(mybuffer[buffer_index - 2], sam_A) < 0) then
                 if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
-					end
-				end
+                    end
+                end
             else
                 if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
-					end
-				end
-			end
+                    end
+                end
+            end
 
             sam_A = mybuffer[buffer_index]
-            --mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index + 1] + 512), 10) + sam_A
-			mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index + 1], 0xffff) * weight_A), 9) + ( apply_weight_helper(mybuffer[buffer_index + 1]) * weight_A) + 1), 1) + sam_A
-
+            mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index + 1] + 512), 10) + sam_A
+            
             if (signed_xor(mybuffer[buffer_index + 1], sam_A) < 0) then
                 if (mybuffer[buffer_index + 1] ~= 0 and sam_A ~= 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
-					end
-				end
+                    end
+                end
             else
                 if (mybuffer[buffer_index + 1] ~= 0 and sam_A ~= 0) then
                     weight_A = weight_A + delta
                     if (weight_A > 1024) then
                         weight_A = 1024
-					end
-				end
-			end
-		end
+                    end
+                end
+            end
+        end
 
         buffer_index = end_index + 1
         
         dpp.samples_B[0] = mybuffer[buffer_index - 2]
 
-	elseif(dpp.term == -3) then
+    elseif(dpp.term == -3) then
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = mybuffer[buffer_index]
 
-            --mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index - 1] + 512), 10) + sam_A
-			mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 1], 0xffff) * weight_A), 9) + ( apply_weight_helper(mybuffer[buffer_index - 1]) * weight_A) + 1), 1) + sam_A
-
+            mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index - 1] + 512), 10) + sam_A
+            
             if (signed_xor(mybuffer[buffer_index - 1], sam_A) < 0) then
                 if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
-					end
-				end
+                    end
+                end
             else 
                 if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
-					end
-				end
-			end
+                    end
+                end
+            end
 
             sam_A = mybuffer[buffer_index + 1]
-            --mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[buffer_index - 2] + 512), 10) + sam_A
-			mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 2], 0xffff) * weight_B), 9) + ( apply_weight_helper(mybuffer[buffer_index - 2]) * weight_B) + 1), 1) + sam_A
-
+            mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[buffer_index - 2] + 512), 10) + sam_A
+            
             if (signed_xor(mybuffer[buffer_index - 2], sam_A) < 0) then
                 if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
-					end
-				end
+                    end
+                end
             else 
                 if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
-					end
-				end
-			end
-		end	
+                    end
+                end
+            end
+        end    
 
         buffer_index = end_index + 1
         
@@ -2486,32 +2772,30 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = mybuffer[buffer_index]
             
-            --mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[tptr] + 512), 10) + sam_A
-			mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(mybuffer[tptr], 0xffff) * weight_A), 9) + ( apply_weight_helper(mybuffer[tptr]) * weight_A) + 1), 1) + sam_A
-
+            mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[tptr] + 512), 10) + sam_A
+           
             if (mybuffer[tptr] ~= 0 and sam_A ~= 0) then 
                 if signed_xor(mybuffer[tptr], sam_A) < 0 then
                     weight_A = weight_A - delta
                 else 
                     weight_A = weight_A + delta
-				end
-			end
+                end
+            end
 
             sam_A = mybuffer[buffer_index + 1]
-            --mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[tptr + 1] + 512), 10) + sam_A
-			mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(mybuffer[tptr + 1], 0xffff) * weight_B), 9) + ( apply_weight_helper(mybuffer[tptr + 1]) * weight_B) + 1), 1) + sam_A
+            mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[tptr + 1] + 512), 10) + sam_A
 
             if (mybuffer[tptr + 1] ~= 0 and sam_A ~= 0) then 
                 if signed_xor(mybuffer[tptr + 1], sam_A) < 0 then
                     weight_B = weight_B - delta 
                 else 
                     weight_B = weight_B + delta
-				end
-			end
+                end
+            end
 
 
             tptr = tptr + 2
-		end	
+        end    
 
         buffer_index = end_index
 
@@ -2524,13 +2808,292 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
             dpp.samples_A[bit32.band(k, (MAX_TERM - 1))] = mybuffer[buffer_index]
             buffer_index = buffer_index - 1
             k = k - 1
-		end	
-	end
-			
+        end    
+    end
+            
     dpp.weight_A =  weight_A
     dpp.weight_B =  weight_B
 end
 
+function decorr_stereo_pass_cont_24bit(dpp, mybuffer, sample_count, buf_idx) 
+    local delta = dpp.delta
+    local weight_A = dpp.weight_A
+    local weight_B = dpp.weight_B
+    local tptr = 0
+    local sam_A = 0
+    local sam_B = 0
+    local k = 0
+    local i = 0
+    local buffer_index = buf_idx
+    local end_index = (buf_idx + sample_count * 2)-1
+
+    if(dpp.term == 17) then
+        for buffer_index = buf_idx, end_index, 2 do
+            sam_A = 2 * mybuffer[buffer_index - 2] - mybuffer[buffer_index - 4]
+
+            sam_B = mybuffer[buffer_index]
+            mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + sam_B
+
+            if (sam_A ~= 0 and sam_B ~= 0) then
+                if signed_xor(sam_A, sam_B) < 0 then
+                    weight_A = weight_A - delta 
+                else
+                    weight_A = weight_A + delta
+                end
+            end
+
+            sam_A = 2 * mybuffer[buffer_index - 1] - mybuffer[buffer_index - 3]
+            sam_B = mybuffer[buffer_index + 1]
+            mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + sam_B
+
+            if (sam_A ~= 0 and sam_B ~= 0) then 
+                if signed_xor(sam_A, sam_B) < 0 then
+                    weight_B = weight_B - delta 
+                else
+                    weight_B = weight_B + delta
+                end
+            end    
+            
+        end
+        
+        buffer_index = end_index + 1
+        
+        dpp.samples_B[0] = mybuffer[buffer_index - 1]
+        dpp.samples_A[0] = mybuffer[buffer_index - 2]
+        dpp.samples_B[1] = mybuffer[buffer_index - 3]
+        dpp.samples_A[1] = mybuffer[buffer_index - 4]
+
+    elseif(dpp.term == 18) then
+        for buffer_index = buf_idx, end_index, 2 do
+            sam_A = signed_rshift((3 * mybuffer[buffer_index - 2] - mybuffer[buffer_index - 4]), 1)
+            sam_B = mybuffer[buffer_index]
+
+            mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + sam_B
+
+            if (sam_A ~= 0 and sam_B ~= 0) then 
+                if signed_xor(sam_A, sam_B) < 0 then
+                    weight_A = weight_A - delta 
+                else
+                    weight_A = weight_A + delta
+                end
+            end
+
+
+            sam_A = signed_rshift((3 * mybuffer[buffer_index - 1] - mybuffer[buffer_index - 3]), 1)
+            sam_B = mybuffer[buffer_index + 1]
+
+            mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + sam_B
+
+            if (sam_A ~= 0 and sam_B ~= 0) then 
+                if signed_xor(sam_A, sam_B) < 0 then
+                    weight_B = weight_B - delta 
+                else 
+                    weight_B = weight_B + delta
+                end
+            end
+        end    
+
+        buffer_index = end_index + 1
+
+        dpp.samples_B[0] = mybuffer[buffer_index - 1]
+        dpp.samples_A[0] = mybuffer[buffer_index - 2]
+        dpp.samples_B[1] = mybuffer[buffer_index - 3]
+        dpp.samples_A[1] = mybuffer[buffer_index - 4]
+
+    elseif(dpp.term == -1) then
+        for buffer_index = buf_idx, end_index, 2 do
+            sam_A = mybuffer[buffer_index]
+
+            mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 1], 0xffff) * weight_A), 9) + ( apply_weight_helper(mybuffer[buffer_index - 1]) * weight_A) + 1), 1) + sam_A
+
+            if (signed_xor(mybuffer[buffer_index - 1], sam_A) < 0) then
+                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+                    weight_A = weight_A - delta
+                    if weight_A < -1024 then
+                        weight_A = -1024
+                    end
+                end    
+            else
+                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+                    weight_A = weight_A + delta
+                    if (weight_A > 1024) then
+                        weight_A = 1024
+                    end
+                end
+            end
+            
+            sam_A = mybuffer[buffer_index + 1]
+
+            mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index], 0xffff) * weight_B), 9) + ( apply_weight_helper(mybuffer[buffer_index]) * weight_B) + 1), 1) + sam_A
+
+            if (signed_xor(mybuffer[buffer_index], sam_A) < 0) then
+                if (mybuffer[buffer_index] ~= 0 and sam_A ~= 0 ) then
+                    weight_B = weight_B - delta
+                    if weight_B < -1024 then
+                        weight_B = -1024
+                    end
+                end
+            else
+                if (mybuffer[buffer_index] ~= 0 and sam_A ~= 0 ) then
+                    weight_B = weight_B + delta
+                    if weight_B > 1024 then
+                        weight_B = 1024
+                    end
+                end
+            end
+        end
+        
+        buffer_index = end_index + 1
+        
+        dpp.samples_A[0] = mybuffer[buffer_index - 1]
+
+    elseif(dpp.term == -2) then
+        sam_A = 0
+        sam_B = 0
+
+        for buffer_index = buf_idx, end_index, 2 do
+            sam_A = mybuffer[buffer_index + 1]
+
+            mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 2], 0xffff) * weight_B), 9) + ( apply_weight_helper(mybuffer[buffer_index - 2]) * weight_B) + 1), 1) + sam_A
+
+            if (signed_xor(mybuffer[buffer_index - 2], sam_A) < 0) then
+                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+                    weight_B = weight_B - delta
+                    if weight_B < -1024 then
+                        weight_B = -1024
+                    end
+                end
+            else
+                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+                    weight_B = weight_B + delta
+                    if weight_B > 1024 then
+                        weight_B = 1024
+                    end
+                end
+            end
+
+            sam_A = mybuffer[buffer_index]
+
+            mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index + 1], 0xffff) * weight_A), 9) + ( apply_weight_helper(mybuffer[buffer_index + 1]) * weight_A) + 1), 1) + sam_A
+
+            if (signed_xor(mybuffer[buffer_index + 1], sam_A) < 0) then
+                if (mybuffer[buffer_index + 1] ~= 0 and sam_A ~= 0) then
+                    weight_A = weight_A - delta
+                    if weight_A < -1024 then
+                        weight_A = -1024
+                    end
+                end
+            else
+                if (mybuffer[buffer_index + 1] ~= 0 and sam_A ~= 0) then
+                    weight_A = weight_A + delta
+                    if (weight_A > 1024) then
+                        weight_A = 1024
+                    end
+                end
+            end
+        end
+
+        buffer_index = end_index + 1
+        
+        dpp.samples_B[0] = mybuffer[buffer_index - 2]
+
+    elseif(dpp.term == -3) then
+        for buffer_index = buf_idx, end_index, 2 do
+            sam_A = mybuffer[buffer_index]
+
+            mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 1], 0xffff) * weight_A), 9) + ( apply_weight_helper(mybuffer[buffer_index - 1]) * weight_A) + 1), 1) + sam_A
+
+            if (signed_xor(mybuffer[buffer_index - 1], sam_A) < 0) then
+                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+                    weight_A = weight_A - delta
+                    if weight_A < -1024 then
+                        weight_A = -1024
+                    end
+                end
+            else 
+                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+                    weight_A = weight_A + delta
+                    if weight_A > 1024 then
+                        weight_A = 1024
+                    end
+                end
+            end
+
+            sam_A = mybuffer[buffer_index + 1]
+
+            mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 2], 0xffff) * weight_B), 9) + ( apply_weight_helper(mybuffer[buffer_index - 2]) * weight_B) + 1), 1) + sam_A
+
+            if (signed_xor(mybuffer[buffer_index - 2], sam_A) < 0) then
+                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+                    weight_B = weight_B - delta
+                    if weight_B < -1024 then
+                        weight_B = -1024
+                    end
+                end
+            else 
+                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+                    weight_B = weight_B + delta
+                    if weight_B > 1024 then
+                        weight_B = 1024
+                    end
+                end
+            end
+        end    
+
+        buffer_index = end_index + 1
+        
+        dpp.samples_A[0] = mybuffer[buffer_index - 1]
+        dpp.samples_B[0] = mybuffer[buffer_index - 2]
+
+    else
+        tptr = buf_idx - (dpp.term * 2)
+
+        for buffer_index = buf_idx, end_index, 2 do
+            sam_A = mybuffer[buffer_index]
+            
+            mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(mybuffer[tptr], 0xffff) * weight_A), 9) + ( apply_weight_helper(mybuffer[tptr]) * weight_A) + 1), 1) + sam_A
+
+            if (mybuffer[tptr] ~= 0 and sam_A ~= 0) then 
+                if signed_xor(mybuffer[tptr], sam_A) < 0 then
+                    weight_A = weight_A - delta
+                else 
+                    weight_A = weight_A + delta
+                end
+            end
+
+            sam_A = mybuffer[buffer_index + 1]
+
+            mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(mybuffer[tptr + 1], 0xffff) * weight_B), 9) + ( apply_weight_helper(mybuffer[tptr + 1]) * weight_B) + 1), 1) + sam_A
+
+            if (mybuffer[tptr + 1] ~= 0 and sam_A ~= 0) then 
+                if signed_xor(mybuffer[tptr + 1], sam_A) < 0 then
+                    weight_B = weight_B - delta 
+                else 
+                    weight_B = weight_B + delta
+                end
+            end
+
+
+            tptr = tptr + 2
+        end    
+
+        buffer_index = end_index
+
+        k = dpp.term - 1
+        i = 8
+        while i > 0 do
+            i = i - 1
+            dpp.samples_B[bit32.band(k, (MAX_TERM - 1))] = mybuffer[buffer_index]
+            buffer_index = buffer_index - 1
+            dpp.samples_A[bit32.band(k, (MAX_TERM - 1))] = mybuffer[buffer_index]
+            buffer_index = buffer_index - 1
+            k = k - 1
+        end    
+    end
+            
+    dpp.weight_A =  weight_A
+    dpp.weight_B =  weight_B
+end
 
 function decorr_mono_pass(dpp, mybuffer, sample_count,  buf_idx) 
     local delta = dpp.delta
@@ -2541,77 +3104,153 @@ function decorr_mono_pass(dpp, mybuffer, sample_count,  buf_idx)
     local bptr_counter = 0
     local end_index = buf_idx + sample_count - 1
 
-	if(dpp.term == 17) then
+    if(dpp.term == 17) then
         for bptr_counter = buf_idx, end_index, 1 do
             sam_A = 2 * dpp.samples_A[0] - dpp.samples_A[1]
             dpp.samples_A[1] = dpp.samples_A[0]
-            --dpp.samples_A[0] =  signed_rshift((weight_A *sam_A + 512), 10) + mybuffer[bptr_counter]
-			dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
-
+            dpp.samples_A[0] =  signed_rshift((weight_A *sam_A + 512), 10) + mybuffer[bptr_counter]
+            
             if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                 else
                     weight_A = weight_A + delta
-				end	
-			end
+                end    
+            end
                     
             mybuffer[bptr_counter] = dpp.samples_A[0]
-		end
-	elseif (dpp.term == 18) then
-        for bptr_counter = buf_idx, end_index, 1 do	
+        end
+    elseif (dpp.term == 18) then
+        for bptr_counter = buf_idx, end_index, 1 do    
             sam_A = signed_rshift((3 * dpp.samples_A[0] - dpp.samples_A[1]), 1)
             dpp.samples_A[1] = dpp.samples_A[0]
-            --dpp.samples_A[0] = signed_rshift(((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
-			dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
-			--dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( signed_rshift(bit32.band(sam_A, bit32.bnot(0xFFFF)), 9) * weight_A) + 1), 1) + mybuffer[bptr_counter]
-
+            dpp.samples_A[0] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            
             if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                 else
                     weight_A = weight_A + delta
-				end
-			end
+                end
+            end
 
-            mybuffer[bptr_counter] = dpp.samples_A[0]		
-		end
+            mybuffer[bptr_counter] = dpp.samples_A[0]        
+        end
     else
         m = 0
         k = bit32.band(dpp.term, (MAX_TERM - 1))
         
-        for bptr_counter = buf_idx, end_index, 1 do		
+        for bptr_counter = buf_idx, end_index, 1 do        
             sam_A = dpp.samples_A[m]
-            --dpp.samples_A[k] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
-			dpp.samples_A[k] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
+            dpp.samples_A[k] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            
+            if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
+                if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
+                    weight_A = weight_A - delta
+                else
+                    weight_A = weight_A + delta
+                end
+            end
+            
+            mybuffer[bptr_counter] = dpp.samples_A[k]
+            m = bit32.band((m + 1), (MAX_TERM - 1))
+            k = bit32.band((k + 1), (MAX_TERM - 1))            
+        end    
+
+        if (m ~= 0) then        
+            temp_samples = {}
+
+            for tmpiter = 0,MAX_TERM-1,1 do
+                temp_samples[tmpiter] = dpp.samples_A[tmpiter]
+            end    
+
+            for k = 0,MAX_TERM-1, 1 do
+                dpp.samples_A[k] = temp_samples[bit32.band(m, (MAX_TERM - 1))]
+                m = m + 1
+            end                    
+        end        
+    end
+    
+    dpp.weight_A =  weight_A
+end
+
+function decorr_mono_pass_24bit(dpp, mybuffer, sample_count,  buf_idx) 
+    local delta = dpp.delta
+    local weight_A = dpp.weight_A
+    local sam_A = 0
+    local m = 0
+    local k = 0
+    local bptr_counter = 0
+    local end_index = buf_idx + sample_count - 1
+
+    if(dpp.term == 17) then
+        for bptr_counter = buf_idx, end_index, 1 do
+            sam_A = 2 * dpp.samples_A[0] - dpp.samples_A[1]
+            dpp.samples_A[1] = dpp.samples_A[0]
+            dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
 
             if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                 else
                     weight_A = weight_A + delta
-				end
-			end
-			
+                end    
+            end
+                    
+            mybuffer[bptr_counter] = dpp.samples_A[0]
+        end
+    elseif (dpp.term == 18) then
+        for bptr_counter = buf_idx, end_index, 1 do    
+            sam_A = signed_rshift((3 * dpp.samples_A[0] - dpp.samples_A[1]), 1)
+            dpp.samples_A[1] = dpp.samples_A[0]
+            dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
+           
+            if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
+                if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
+                    weight_A = weight_A - delta
+                else
+                    weight_A = weight_A + delta
+                end
+            end
+
+            mybuffer[bptr_counter] = dpp.samples_A[0]        
+        end
+    else
+        m = 0
+        k = bit32.band(dpp.term, (MAX_TERM - 1))
+        
+        for bptr_counter = buf_idx, end_index, 1 do        
+            sam_A = dpp.samples_A[m]
+            
+            dpp.samples_A[k] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
+
+            if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
+                if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
+                    weight_A = weight_A - delta
+                else
+                    weight_A = weight_A + delta
+                end
+            end
+            
             mybuffer[bptr_counter] = dpp.samples_A[k]
             m = bit32.band((m + 1), (MAX_TERM - 1))
-            k = bit32.band((k + 1), (MAX_TERM - 1))			
-		end	
+            k = bit32.band((k + 1), (MAX_TERM - 1))            
+        end    
 
-        if (m ~= 0) then		
+        if (m ~= 0) then        
             temp_samples = {}
 
             for tmpiter = 0,MAX_TERM-1,1 do
                 temp_samples[tmpiter] = dpp.samples_A[tmpiter]
-			end	
+            end    
 
             for k = 0,MAX_TERM-1, 1 do
                 dpp.samples_A[k] = temp_samples[bit32.band(m, (MAX_TERM - 1))]
                 m = m + 1
-			end					
-		end		
-	end
-	
+            end                    
+        end        
+    end
+    
     dpp.weight_A =  weight_A
 end
 
@@ -2627,17 +3266,17 @@ function fixup_samples( wps, mybuffer, sample_count)
     flags = wps.wphdr.flags
     shift = bit32.rshift(bit32.band(flags, SHIFT_MASK), SHIFT_LSB)
 
-    if (bit32.band(flags, FLOAT_DATA) ~= 0) then	
+    if (bit32.band(flags, FLOAT_DATA) ~= 0) then    
         sc = 0
 
         if (bit32.band(flags, MONO_FLAG) ~= 0) then
             sc = sample_count
         else
             sc = sample_count * 2
-		end	
+        end    
 
         mybuffer = float_values(wps, mybuffer, sc)
-	end	
+    end    
 
     if (bit32.band(flags, INT32_DATA) ~= 0) then
 
@@ -2652,7 +3291,7 @@ function fixup_samples( wps, mybuffer, sample_count)
             count = sample_count
         else
             count = sample_count * 2
-		end	
+        end    
 
         if (bit32.band(flags, HYBRID_FLAG) == 0 and sent_bits == 0 and (zeros + ones + dups) ~= 0) then
             while (count > 0) do
@@ -2664,15 +3303,15 @@ function fixup_samples( wps, mybuffer, sample_count)
 
                 elseif (dups ~= 0) then
                     mybuffer[buffer_counter] =  bit32.lshift((mybuffer[buffer_counter] + bit32.band(mybuffer[buffer_counter], 1)), dups) - bit32.band(mybuffer[buffer_counter], 1)
-				end
-				
+                end
+                
                 buffer_counter = buffer_counter + 1
                 count = count - 1
-			end	
+            end    
         else
             shift = shift + zeros + sent_bits + ones + dups
-		end	
-	end
+        end    
+    end
 
     if (bit32.band(flags, HYBRID_FLAG) ~= 0) then
         min_value = 0
@@ -2680,8 +3319,8 @@ function fixup_samples( wps, mybuffer, sample_count)
         min_shifted = 0
         max_shifted = 0
         local buffer_counter = 0
-		
-		switch_value = bit32.band(flags, BYTES_STORED)
+        
+        switch_value = bit32.band(flags, BYTES_STORED)
 
         if(switch_value == 0) then
             min_value = -128
@@ -2702,16 +3341,16 @@ function fixup_samples( wps, mybuffer, sample_count)
             max_shifted = bit32.lshift(bit32.rshift(max_value, shift), shift)
             
         else
-			-- when switch_value is 3 or other value
+            -- when switch_value is 3 or other value
             min_value = 0x80000000
             min_shifted = bit32.lshift(bit32.rshift(min_value, shift), shift)
             max_value = 0x7FFFFFFF
             max_shifted = bit32.lshift(bit32.rshift(max_value, shift), shift)
-		end	
+        end    
 
         if (bit32.band(flags, MONO_FLAG) == 0) then
             sample_count = sample_count * 2
-		end	
+        end    
 
         while (sample_count > 0) do
             if (mybuffer[buffer_counter] < min_value) then
@@ -2722,28 +3361,28 @@ function fixup_samples( wps, mybuffer, sample_count)
 
             else
                 mybuffer[buffer_counter] = bit32.lshift(mybuffer[buffer_counter],shift)
-			end	
+            end    
 
             buffer_counter = buffer_counter + 1
             sample_count = sample_count - 1
-		end	
+        end    
 
     elseif (shift ~= 0) then
-	
-		local buffer_counter = 0
+    
+        local buffer_counter = 0
 
         if (bit32.band(flags, MONO_FLAG) == 0) then
             sample_count = sample_count * 2
-		end	
+        end    
 
         while (sample_count > 0) do
-            mybuffer[buffer_counter] = signed_lshift(mybuffer[buffer_counter], shift)		
+            mybuffer[buffer_counter] = signed_lshift(mybuffer[buffer_counter], shift)        
             buffer_counter = buffer_counter + 1
             sample_count = sample_count - 1
-		end	
+        end    
 
-	end
-	
+    end
+    
     return mybuffer
 end
 
@@ -2760,7 +3399,7 @@ function check_crc_error(wpc)
 
     if (wps.crc ~= wps.wphdr.crc) then
         result = result + 1
-	end	
+    end    
 
     return result
 end
@@ -2774,42 +3413,42 @@ function read_entropy_vars(wps, wpmd)
     b_array = {}
     local i = 0
     w = words_data:new()
-	
-	-- first lets clear down the values
-	w.c[0].median[0] = 0
-	w.c[0].median[1] = 0
-	w.c[0].median[2] = 0	
-	w.c[1].median[0] = 0
-	w.c[1].median[1] = 0
-	w.c[1].median[2] = 0
+    
+    -- first lets clear down the values
+    w.c[0].median[0] = 0
+    w.c[0].median[1] = 0
+    w.c[0].median[2] = 0    
+    w.c[1].median[0] = 0
+    w.c[1].median[1] = 0
+    w.c[1].median[2] = 0
 
     for i = 0,5,1 do
         b_array[i] = bit32.band(string.byte(byteptr,(i+1)), 0xff)
-	end
-	
+    end
+    
     w.holding_one = 0
     w.holding_zero = 0
 
     if (wpmd.byte_length ~= 12) then
-		if (bit32.band(wps.wphdr.flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then
+        if (bit32.band(wps.wphdr.flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then
             return false
-		end
-	end
-	
+        end
+    end
+    
     w.c[0].median[0] = exp2s(b_array[0] + bit32.lshift(b_array[1], 8))
     w.c[0].median[1] = exp2s(b_array[2] + bit32.lshift(b_array[3], 8))
     w.c[0].median[2] = exp2s(b_array[4] + bit32.lshift(b_array[5], 8))
 
-	if (bit32.band(wps.wphdr.flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then
+    if (bit32.band(wps.wphdr.flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then
         for i = 6,11,1 do
             b_array[i] = bit32.band(string.byte(byteptr,(i+1)), 0xff)
-		end	
+        end    
 
         w.c[1].median[0] = exp2s(b_array[6] + bit32.lshift(b_array[7], 8))
         w.c[1].median[1] = exp2s(b_array[8] + bit32.lshift(b_array[9], 8))
         w.c[1].median[2] = exp2s(b_array[10] + bit32.lshift(b_array[11], 8))
-	end
-	
+    end
+    
     wps.w = w
 
     return true
@@ -2823,7 +3462,7 @@ end
 function read_hybrid_profile(wps, wpmd)
     local byteptr = wpmd.data
     local bytecnt = wpmd.byte_length
-    local buffer_counter = 1	-- arrays start at 1
+    local buffer_counter = 1    -- arrays start at 1
     local uns_buf = 0
     local uns_buf_plusone = 0
 
@@ -2839,8 +3478,8 @@ function read_hybrid_profile(wps, wpmd)
             uns_buf_plusone = bit32.band(string.byte(byteptr,(buffer_counter + 1)), 0xff)
             wps.w.c[1].slow_level = exp2s(uns_buf + bit32.lshift(uns_buf_plusone, 8))
             buffer_counter = buffer_counter + 2
-		end	
-	end
+        end    
+    end
 
     uns_buf = bit32.band(string.byte(byteptr,buffer_counter), 0xff)
     uns_buf_plusone = bit32.band(string.byte(byteptr,(buffer_counter + 1)), 0xff)
@@ -2848,13 +3487,13 @@ function read_hybrid_profile(wps, wpmd)
     wps.w.bitrate_acc[0] = bit32.lshift((uns_buf + bit32.lshift(uns_buf_plusone, 8)), 16)
     buffer_counter = buffer_counter + 2
 
-	if (bit32.band(wps.wphdr.flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then
+    if (bit32.band(wps.wphdr.flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then
         uns_buf = bit32.band(string.byte(byteptr,buffer_counter), 0xff)
         uns_buf_plusone = bit32.band(string.byte(byteptr,(buffer_counter + 1)), 0xff)
 
         wps.w.bitrate_acc[1] = bit32.lshift((uns_buf + bit32.lshift(uns_buf_plusone, 8)), 16)
         buffer_counter = buffer_counter + 2
-	end	
+    end    
 
     if (buffer_counter < bytecnt) then
         uns_buf = bit32.band(string.byte(byteptr,buffer_counter), 0xff)
@@ -2863,21 +3502,21 @@ function read_hybrid_profile(wps, wpmd)
         wps.w.bitrate_delta[0] = exp2s((uns_buf + bit32.lshift(uns_buf_plusone, 8)))
         buffer_counter = buffer_counter + 2
 
-		if (bit32.band(wps.wphdr.flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then
+        if (bit32.band(wps.wphdr.flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then
             uns_buf = bit32.band(string.byte(byteptr,buffer_counter), 0xff)
             uns_buf_plusone = bit32.band(string.byte(byteptr,(buffer_counter + 1)), 0xff)
             wps.w.bitrate_delta[1] = exp2s((uns_buf + bit32.lshift(uns_buf_plusone, 8)))
             buffer_counter = buffer_counter + 2
-		end	
+        end    
 
         if (buffer_counter < bytecnt) then
             return false
-		end	
+        end    
 
     else
-		wps.w.bitrate_delta[1] = 0
+        wps.w.bitrate_delta[1] = 0
         wps.w.bitrate_delta[0] = 0
-	end	
+    end    
 
     return true
 end
@@ -2890,26 +3529,26 @@ end
 
 function update_error_limit(w, flags)
 
-	local slow_log_0 = 0
-	local slow_log_1 = 0
+    local slow_log_0 = 0
+    local slow_log_1 = 0
     w.bitrate_acc[0] = w.bitrate_acc[0] + w.bitrate_delta[0] 
     local bitrate_0 = bit32.rshift(w.bitrate_acc[0], 16)
-	
-	local bitrate_1 = 0
-	local balance = 0
+    
+    local bitrate_1 = 0
+    local balance = 0
 
-	if (bit32.band(flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) ~= 0) then
+    if (bit32.band(flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) ~= 0) then
         if (bit32.band(flags, HYBRID_BITRATE) ~= 0) then
             slow_log_0 = bit32.rshift((w.c[0].slow_level + SLO), SLS)
 
             if (slow_log_0 - bitrate_0 > -0x100) then
-                w.c[0].error_limit = exp2s(slow_log_0 - bitrate_0 + 0x100)				
+                w.c[0].error_limit = exp2s(slow_log_0 - bitrate_0 + 0x100)                
             else 
-                w.c[0].error_limit = 0					
-			end	
+                w.c[0].error_limit = 0                    
+            end    
         else
-            w.c[0].error_limit = exp2s(bitrate_0)			
-		end	
+            w.c[0].error_limit = exp2s(bitrate_0)            
+        end    
     else
         w.bitrate_acc[1] = w.bitrate_acc[1] + w.bitrate_delta[1]
         bitrate_1 = bit32.rshift(w.bitrate_acc[1], 16)
@@ -2930,26 +3569,26 @@ function update_error_limit(w, flags)
                 else
                     bitrate_1 = bitrate_0 + balance
                     bitrate_0 = bitrate_0 - balance
-				end	
-			end
+                end    
+            end
 
             if (slow_log_0 - bitrate_0 > -0x100) then
-                w.c[0].error_limit = exp2s(slow_log_0 - bitrate_0 + 0x100)					
+                w.c[0].error_limit = exp2s(slow_log_0 - bitrate_0 + 0x100)                    
             else
-                w.c[0].error_limit = 0					
-			end	
+                w.c[0].error_limit = 0                    
+            end    
 
             if (slow_log_1 - bitrate_1 > -0x100) then
                 w.c[1].error_limit = exp2s(slow_log_1 - bitrate_1 + 0x100)
             else 
                 w.c[1].error_limit = 0
-			end	
+            end    
             
         else
-            w.c[0].error_limit = exp2s(bitrate_0)				
+            w.c[0].error_limit = exp2s(bitrate_0)                
             w.c[1].error_limit = exp2s(bitrate_1)
-		end	
-	end
+        end    
+    end
 
     return w
 end
@@ -2967,21 +3606,21 @@ function get_words(nsamples, flags, w, bs, buffer)
     csamples = 0
     local buffer_counter = 0
     local entidx = 1
-	local next8 = 0
-	local uns_buf = 0
-	local ones_count = 0
-	local low = 0
-	local mid = 0
-	local high = 0
-	local mask = 0
-	local cbits = 0
+    local next8 = 0
+    local uns_buf = 0
+    local ones_count = 0
+    local low = 0
+    local mid = 0
+    local high = 0
+    local mask = 0
+    local cbits = 0
 
-	if (bit32.band(flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then  -- if not mono
+    if (bit32.band(flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then  -- if not mono
         nsamples = nsamples * 2
     else
         -- it is mono
         entidx = 0
-	end	
+    end    
 
     for gw_counter = 0, nsamples-1,1 do
 
@@ -2992,7 +3631,7 @@ function get_words(nsamples, flags, w, bs, buffer)
 
         if (bit32.band(flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) == 0) then -- if not mono
             entidx = 1 - entidx
-		end	
+        end    
 
         if (bit32.band(w.c[0].median[0], bit32.bnot(1)) == 0 and w.holding_zero == 0 and w.holding_one == 0
             and bit32.band(w.c[1].median[0], bit32.bnot(1)) == 0) then
@@ -3003,12 +3642,12 @@ function get_words(nsamples, flags, w, bs, buffer)
             if (w.zeros_acc > 0) then
                 w.zeros_acc = w.zeros_acc - 1
 
-                if (w.zeros_acc > 0) then				
+                if (w.zeros_acc > 0) then                
                     c[entidx].slow_level = c[entidx].slow_level - bit32.rshift((c[entidx].slow_level + SLO), SLS)
                     buffer[buffer_counter] = 0
                     buffer_counter = buffer_counter + 1
                     goto continue1
-				end
+                end
             else 
                 -- section called by mono code
                 cbits = 0
@@ -3017,11 +3656,11 @@ function get_words(nsamples, flags, w, bs, buffer)
                 while (cbits < 33 and bs.bitval > 0) do
                     cbits = cbits + 1
                     bs = getbit(bs)
-				end	
+                end    
 
                 if (cbits == 33) then
                     break
-				end	
+                end    
 
                 if (cbits < 2) then
                     w.zeros_acc = cbits
@@ -3037,17 +3676,17 @@ function get_words(nsamples, flags, w, bs, buffer)
 
                         if (bs.bitval > 0) then
                             w.zeros_acc = bit32.bor(w.zeros_acc, mask)
-						end
-						
+                        end
+                        
                         mask = bit32.lshift(mask,1)
                         cbits = cbits - 1
-					end
+                    end
                     w.zeros_acc = bit32.bor(w.zeros_acc, mask)
-				end	
+                end    
 
-                if (w.zeros_acc > 0) then			
+                if (w.zeros_acc > 0) then            
                     c[entidx].slow_level = c[entidx].slow_level - bit32.rshift((c[entidx].slow_level + SLO), SLS)
-				
+                
                     w.c[0].median[0] = 0
                     w.c[0].median[1] = 0
                     w.c[0].median[2] = 0
@@ -3057,15 +3696,15 @@ function get_words(nsamples, flags, w, bs, buffer)
 
                     buffer[buffer_counter] = 0
                     buffer_counter = buffer_counter + 1
-				
+                
                     goto continue1
-				end	
-			end
-		end
-		
+                end    
+            end
+        end
+        
         if (w.holding_zero > 0) then
             ones_count = 0
-			w.holding_zero = 0
+            w.holding_zero = 0
         else
             next8 = 0
             uns_buf = 0
@@ -3074,9 +3713,9 @@ function get_words(nsamples, flags, w, bs, buffer)
                 bs.ptr = bs.ptr + 1
                 bs.buf_index = bs.buf_index + 1
 
-                if (bs.ptr == bs.bs_end) then			
+                if (bs.ptr == bs.bs_end) then            
                     bs = bs_read(bs)
-				end	
+                end    
 
                 uns_buf = bit32.band(bs.buf[bs.buf_index], 0xff)
 
@@ -3085,11 +3724,11 @@ function get_words(nsamples, flags, w, bs, buffer)
                 next8 =  bit32.band(bs.sr, 0xff)
 
                 bs.bc = bs.bc + 8
-            else				
-                next8 =  bit32.band(bs.sr, 0xff)					
-			end	
+            else                
+                next8 =  bit32.band(bs.sr, 0xff)                    
+            end    
 
-            if (next8 == 0xff) then							
+            if (next8 == 0xff) then                            
                 bs.bc = bs.bc - 8
                 bs.sr = bit32.rshift(bs.sr,8)
 
@@ -3099,11 +3738,11 @@ function get_words(nsamples, flags, w, bs, buffer)
                 while (ones_count < (LIMIT_ONES + 1) and bs.bitval > 0) do
                     ones_count = ones_count + 1
                     bs = getbit(bs)
-				end	
+                end    
                 
-                if (ones_count == (LIMIT_ONES + 1)) then			
+                if (ones_count == (LIMIT_ONES + 1)) then            
                     break
-				end	
+                end    
 
                 if (ones_count == LIMIT_ONES) then
                     mask = 0
@@ -3114,11 +3753,11 @@ function get_words(nsamples, flags, w, bs, buffer)
                     while (cbits < 33 and bs.bitval > 0) do
                         cbits = cbits + 1
                         bs = getbit(bs)
-					end	
+                    end    
                     
                     if (cbits == 33) then
                         break
-					end	
+                    end    
 
                     if (cbits < 2) then
                         ones_count = cbits
@@ -3134,24 +3773,24 @@ function get_words(nsamples, flags, w, bs, buffer)
                         while cbits > 0 do
                             bs = getbit(bs)
 
-                            if (bs.bitval > 0) then							
+                            if (bs.bitval > 0) then                            
                                 ones_count = bit32.bor(ones_count,mask)
-							end	
+                            end    
 
                             mask = bit32.lshift(mask,1)
                             cbits = cbits - 1
-						end	
+                        end    
                         
                         ones_count = bit32.bor(ones_count,mask)
-					end
-					
+                    end
+                    
                     ones_count = ones_count + LIMIT_ONES
-				end
-            else			
+                end
+            else            
                 ones_count = ones_count_table[next8+1]
                 bs.bc = bs.bc - (ones_count + 1)
-                bs.sr = bit32.rshift(bs.sr, (ones_count + 1)) -- needs to be unsigned					
-			end	
+                bs.sr = bit32.rshift(bs.sr, (ones_count + 1)) -- needs to be unsigned                    
+            end    
 
             if (w.holding_one > 0) then
                 w.holding_one = bit32.band(ones_count, 1)
@@ -3159,14 +3798,14 @@ function get_words(nsamples, flags, w, bs, buffer)
             else
                 w.holding_one = bit32.band(ones_count, 1)
                 ones_count = bit32.rshift(ones_count,1)
-			end	
+            end    
 
             w.holding_zero =  bit32.band(bit32.bnot(w.holding_one), 1)
-		end
-		
-        if (bit32.band(flags, HYBRID_FLAG) ~= 0 and (bit32.band(flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) ~= 0 or entidx == 0)) then		
+        end
+        
+        if (bit32.band(flags, HYBRID_FLAG) ~= 0 and (bit32.band(flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) ~= 0 or entidx == 0)) then        
             w = update_error_limit(w, flags)
-		end
+        end
 
         if (ones_count == 0) then
             low = 0
@@ -3191,16 +3830,16 @@ function get_words(nsamples, flags, w, bs, buffer)
                     low = low + (ones_count - 2) * ( bit32.rshift(c[entidx].median[2], 4) + 1)
                     high = low + ( bit32.rshift(c[entidx].median[2], 4) + 1) - 1
                     c[entidx].median[2] = c[entidx].median[2] + math.floor((c[entidx].median[2] + DIV2) / DIV2) * 5
-				end
-			end
-		end
+                end
+            end
+        end
 
         mid = bit32.rshift((high + low + 1), 1)
 
         if (c[entidx].error_limit == 0) then
             mid = read_code(bs, high - low)
 
-            mid = mid + low		
+            mid = mid + low        
         else
             while (high - low > c[entidx].error_limit) do
 
@@ -3212,34 +3851,34 @@ function get_words(nsamples, flags, w, bs, buffer)
                 else
                     high = mid -1
                     mid = bit32.rshift((high + low + 1), 1)
-				end
-			end
-		end
+                end
+            end
+        end
 
         bs = getbit(bs)
 
-        if (bs.bitval ~= 0) then		
+        if (bs.bitval ~= 0) then        
             buffer[buffer_counter] = (-1-mid) -- this was a complement
-        else	
+        else    
             buffer[buffer_counter] = mid
-		end	
+        end    
 
         buffer_counter = buffer_counter + 1
 
         if (bit32.band(flags, HYBRID_BITRATE) ~= 0) then
             c[entidx].slow_level = c[entidx].slow_level - bit32.rshift((c[entidx].slow_level + SLO), SLS) + mylog2(mid)
-		end	
+        end    
 
-	::continue1::
-		csamples = csamples + 1
-	end
+    ::continue1::
+        csamples = csamples + 1
+    end
     w.c = c
 
     if (bit32.band(flags, bit32.bor(MONO_FLAG, FALSE_STEREO)) ~= 0) then
         return csamples
     else
         return (csamples / 2)
-	end
+    end
 end
 
 function count_bits(av)
@@ -3253,9 +3892,9 @@ function count_bits(av)
                 return nbits_table[ bit32.rshift(av, 16) + 1] + 16
             else
                 return nbits_table[ bit32.rshift(av, 24) + 1] + 24
-			end	
-		end		
-	end			
+            end    
+        end        
+    end            
 end
 
 -- Read a single unsigned value from the specified bitstream with a value
@@ -3271,21 +3910,21 @@ function read_code( bs, maxcode)
 
     if (bitcount == 0) then
         return (0)
-	end	
+    end    
 
     code = getbits(bitcount - 1, bs)
-	   
+       
     code = bit32.band(code,bit32.lshift(1, (bitcount - 1)) - 1)
 
-    if (code >= extras) then 	
+    if (code >= extras) then     
         code = (code + code) - extras
 
         bs = getbit(bs)
 
         if (bs.bitval > 0) then
             code = code + 1
-		end	
-	end
+        end    
+    end
 
     return (code)
 end
@@ -3308,10 +3947,10 @@ end
 function mylog2(avalue)
     dbits = 0
 
-	avalue = avalue + (bit32.rshift(avalue,9))
-	
+    avalue = avalue + (bit32.rshift(avalue,9))
+    
     if (avalue  < bit32.lshift(1, 8)) then
-        dbits = nbits_table[avalue+1]		-- add 1 as array starts at 1 usually in Lua
+        dbits = nbits_table[avalue+1]        -- add 1 as array starts at 1 usually in Lua
         return bit32.lshift(dbits, 8) + log2_table[bit32.band(bit32.lshift(avalue, (9 - dbits)), 0xff) + 1]
     else
         if (avalue < bit32.lshift(1, 16)) then
@@ -3322,10 +3961,10 @@ function mylog2(avalue)
 
         else
             dbits = nbits_table[bit32.rshift(avalue, 24) + 1] + 24
-		end
-			
+        end
+            
         return bit32.lshift(dbits, 8) + log2_table[bit32.band(bit32.rshift(avalue, (dbits - 9)), 0xff ) + 1]
-	end	
+    end    
 end
 
 -- This function returns the log2 for the specified 32-bit signed value.
@@ -3337,7 +3976,7 @@ function log2s(value)
         return -mylog2(-value)
     else
         return mylog2(value)
-	end	
+    end    
 end
 
 -- This function returns the original integer represented by the supplied
@@ -3350,7 +3989,7 @@ function exp2s(log)
 
     if (log < 0) then
         return -exp2s(-log)
-	end	
+    end    
     
     value = bit32.bor(exp2_table[bit32.band(log, 0xff)+1], 0x100)
 
@@ -3359,7 +3998,7 @@ function exp2s(log)
         return bit32.band(bit32.rshift(value, (9 - log)), 0xffffffff)
     else
         return bit32.lshift(value, (log - 9))
-	end	
+    end    
 end
 
 -- These two functions convert internal weights (which are normally +/-1024)
@@ -3369,15 +4008,15 @@ end
 function restore_weight(weight)
     result = 0
 
-	if(weight<0) then
-		result = -bit32.lshift(-weight,3)
-	else	
-		result = bit32.lshift(weight,3)
-	end	
+    if(weight<0) then
+        result = -bit32.lshift(-weight,3)
+    else    
+        result = bit32.lshift(weight,3)
+    end    
    
     if ( result > 0) then
         result = result + bit32.rshift((result + 64), 7)
-	end
-	
+    end
+    
     return result
 end

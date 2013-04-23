@@ -74,8 +74,9 @@ function format_samples( bps, src,  samcnt)
 
 	if bps == 1 then
 		while (samcnt > 0) do
-			dst[counter] = bit32.band(0x00FF, (src[counter] + 128))
+			dst[counter] = bit32.band(0x00FF, (src[counter2] + 128))
 			counter = counter + 1
+			counter2 = counter2 + 1
 			samcnt = samcnt - 1
 		end	
 			
