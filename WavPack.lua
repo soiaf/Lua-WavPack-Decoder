@@ -1992,8 +1992,9 @@ function apply_weight_helper(sample)
     if(sample>=0) then
         result = bit32.rshift(bit32.band(sample, 0xFFFF0000), 9)
     else    
-        local res1 = bit32.band(sample, 0xFFFF0000) - 4294967296    -- 2^32
-        result = signed_rshift(res1, 9)
+        local iterator = bit32.band(sample, 0xFFFF0000)
+        iterator = bit32.bor(bit32.rshift(iterator,9),0xFF800000)
+        result = iterator - 4294967296
     end
     
     return(result)
