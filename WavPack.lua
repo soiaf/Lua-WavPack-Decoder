@@ -23,12 +23,12 @@ HYBRID_FLAG = 8       -- hybrid mode
 FALSE_STEREO = 0x40000000      -- block is stereo, but data is mono
 
 SHIFT_LSB = 13
-SHIFT_MASK = bit32.lshift(0x1F, SHIFT_LSB)
+SHIFT_MASK = 253952		-- 0x1f << SHIFT_LSB
 
 FLOAT_DATA  = 0x80   -- ieee 32-bit floating point data
 
 SRATE_LSB = 23
-SRATE_MASK = bit32.lshift(0xF, SRATE_LSB)
+SRATE_MASK = 125829120		-- 0xf << SRATE_LSB
 
 FINAL_BLOCK = 0x1000  -- final block of multichannel segment
 
@@ -77,7 +77,7 @@ MAX_NTERMS = 16
 MAX_TERM = 8
 
 MAG_LSB = 18
-MAG_MASK = bit32.lshift(0x1F, MAG_LSB)
+MAG_MASK = 8126464			-- 0x1f << MAG_LSB
 
 ID_RIFF_HEADER   = 0x21
 ID_RIFF_TRAILER  = 0x22
@@ -128,7 +128,7 @@ LIMIT_ONES = 16  -- maximum consecutive 1s sent for "div" data
 -- these control the time constant "slow_level" which is used for hybrid mode
 -- that controls bitrate as a function of residual level (HYBRID_BITRATE).
 SLS = 8
-SLO = bit32.lshift(1,(SLS-1))
+SLO = 128			-- 1 << (SLS - 1)
 
 
 -- these control the time constant of the 3 median level breakpoints
@@ -893,7 +893,6 @@ function read_next_header(infile, wphdr)
 end
 
 function getbit(bs)            
-    local uns_buf = 0
 
     if (bs.bc > 0) then
         bs.bc = bs.bc - 1
@@ -907,8 +906,7 @@ function getbit(bs)
             bs = bs_read(bs)
         end
         
-        uns_buf = bit32.band(bs.buf[bs.buf_index], 0xff)
-        bs.sr = uns_buf
+        bs.sr = bs.buf[bs.buf_index]
     end
         
     bs.bitval = bit32.band(bs.sr, 1)
@@ -918,7 +916,6 @@ function getbit(bs)
 end    
 
 function getbits(nbits, bs)
-    local uns_buf = 0
     local value = 0
 
     while (nbits > bs.bc) do
@@ -928,8 +925,8 @@ function getbits(nbits, bs)
         if (bs.ptr == bs.bs_end) then
             bs = bs_read(bs)
         end    
-        uns_buf = bit32.band(bs.buf[bs.buf_index], 0xff)
-        bs.sr = bit32.bor(bs.sr, bit32.lshift(uns_buf, bs.bc)) -- values in buffer must be unsigned
+
+        bs.sr = bit32.bor(bs.sr, bit32.lshift(bs.buf[bs.buf_index], bs.bc)) -- values in buffer must be unsigned
         bs.sr = bit32.band(bs.sr, 0xffffffff) -- bs.sr is unsigned 32 bit
         bs.bc = bs.bc + 8
     end
@@ -938,7 +935,7 @@ function getbits(nbits, bs)
 
     if (bs.bc > 32) then
         bs.bc = bs.bc - nbits
-        bs.sr = bit32.rshift(bit32.band(bs.buf[bs.buf_index], 0xff), (8 - bs.bc))
+        bs.sr = bit32.rshift(bs.buf[bs.buf_index], (8 - bs.bc))
     else 
         bs.bc = bs.bc - nbits
         bs.sr = bit32.rshift(bs.sr,nbits)
@@ -980,13 +977,13 @@ function bs_read(bs)
             bytes_to_read = bs.file_bytes
         end    
 
-        temp = bs.file:read(bytes_to_read)
+        local temp = bs.file:read(bytes_to_read)
         if(nil==temp) then
             bytes_read = 0
         else
             internal_counter = 0
             for i=1,bytes_to_read,1 do
-                bs.buf[internal_counter] = string.byte(temp,i)
+                bs.buf[internal_counter] = string.byte(temp,i)		
                 internal_counter = internal_counter + 1
             end    
             bytes_read = bytes_to_read
@@ -1958,7 +1955,6 @@ function signed_rshift(val, shift)
 end
 
 function signed_xor(val1, val2)
-    local neg_present = false
 
     if(val1<0 or val2<0) then
         if(val1<0 and val2<0) then
@@ -3608,7 +3604,6 @@ function get_words(nsamples, flags, w, bs, buffer)
     local buffer_counter = 0
     local entidx = 1
     local next8 = 0
-    local uns_buf = 0
     local ones_count = 0
     local low = 0
     local mid = 0
@@ -3708,7 +3703,6 @@ function get_words(nsamples, flags, w, bs, buffer)
             w.holding_zero = 0
         else
             next8 = 0
-            uns_buf = 0
 
             if (bs.bc < 8) then
                 bs.ptr = bs.ptr + 1
@@ -3718,9 +3712,7 @@ function get_words(nsamples, flags, w, bs, buffer)
                     bs = bs_read(bs)
                 end    
 
-                uns_buf = bit32.band(bs.buf[bs.buf_index], 0xff)
-
-                bs.sr = bit32.bor(bs.sr, bit32.lshift(uns_buf, bs.bc)) -- values in buffer must be unsigned
+                bs.sr = bit32.bor(bs.sr, bit32.lshift(bs.buf[bs.buf_index], bs.bc)) -- values in buffer must be unsigned
 
                 next8 =  bit32.band(bs.sr, 0xff)
 
@@ -3883,13 +3875,13 @@ function get_words(nsamples, flags, w, bs, buffer)
 end
 
 function count_bits(av)
-    if (av < bit32.lshift(1, 8)) then
+    if (av < 256) then			-- 1 << 8
         return nbits_table[av+1]
     else
-        if (av < bit32.lshift(1, 16)) then
+        if (av < 65536) then		-- 1 << 16
             return nbits_table[ bit32.rshift(av, 8) + 1] + 8
         else
-            if (av < bit32.lshift(1, 24)) then
+            if (av < 16777216) then		-- 1 << 24
                 return nbits_table[ bit32.rshift(av, 16) + 1] + 16
             else
                 return nbits_table[ bit32.rshift(av, 24) + 1] + 24
@@ -3950,14 +3942,14 @@ function mylog2(avalue)
 
     avalue = avalue + (bit32.rshift(avalue,9))
     
-    if (avalue  < bit32.lshift(1, 8)) then
+    if (avalue < 256) then		-- 1 << 8
         dbits = nbits_table[avalue+1]        -- add 1 as array starts at 1 usually in Lua
         return bit32.lshift(dbits, 8) + log2_table[bit32.band(bit32.lshift(avalue, (9 - dbits)), 0xff) + 1]
     else
-        if (avalue < bit32.lshift(1, 16)) then
+        if (avalue < 65536) then			-- 1 << 16
             dbits = nbits_table[bit32.rshift(avalue, 8) + 1] + 8
 
-        elseif (avalue < bit32.lshift(1, 24)) then
+        elseif (avalue < 16777216) then		-- 1 << 24
             dbits = nbits_table[bit32.rshift(avalue, 16) + 1] + 16
 
         else
