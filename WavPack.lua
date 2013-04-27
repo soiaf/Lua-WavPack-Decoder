@@ -23,12 +23,12 @@ HYBRID_FLAG = 8       -- hybrid mode
 FALSE_STEREO = 0x40000000      -- block is stereo, but data is mono
 
 SHIFT_LSB = 13
-SHIFT_MASK = 253952		-- 0x1f << SHIFT_LSB
+SHIFT_MASK = 253952        -- 0x1f << SHIFT_LSB
 
 FLOAT_DATA  = 0x80   -- ieee 32-bit floating point data
 
 SRATE_LSB = 23
-SRATE_MASK = 125829120		-- 0xf << SRATE_LSB
+SRATE_MASK = 125829120        -- 0xf << SRATE_LSB
 
 FINAL_BLOCK = 0x1000  -- final block of multichannel segment
 
@@ -77,7 +77,7 @@ MAX_NTERMS = 16
 MAX_TERM = 8
 
 MAG_LSB = 18
-MAG_MASK = 8126464			-- 0x1f << MAG_LSB
+MAG_MASK = 8126464            -- 0x1f << MAG_LSB
 
 ID_RIFF_HEADER   = 0x21
 ID_RIFF_TRAILER  = 0x22
@@ -128,7 +128,7 @@ LIMIT_ONES = 16  -- maximum consecutive 1s sent for "div" data
 -- these control the time constant "slow_level" which is used for hybrid mode
 -- that controls bitrate as a function of residual level (HYBRID_BITRATE).
 SLS = 8
-SLO = 128			-- 1 << (SLS - 1)
+SLO = 128            -- 1 << (SLS - 1)
 
 
 -- these control the time constant of the 3 median level breakpoints
@@ -983,7 +983,7 @@ function bs_read(bs)
         else
             internal_counter = 0
             for i=1,bytes_to_read,1 do
-                bs.buf[internal_counter] = string.byte(temp,i)		
+                bs.buf[internal_counter] = string.byte(temp,i)        
                 internal_counter = internal_counter + 1
             end    
             bytes_read = bytes_to_read
@@ -2073,40 +2073,36 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
         for bptr_counter = buf_idx, end_index, 2 do
             sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
             
-            if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
-                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+            if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end
-            else
-                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                else
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
                     end
                 end
-            end
+            end            
 
             mybuffer[bptr_counter] = sam_A
             dpp.samples_A[0] = mybuffer[bptr_counter + 1] +  signed_rshift((weight_B * sam_A + 512), 10)
-            
-            if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
-                if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                  
+            if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end
-            else
-                if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end        
 
             mybuffer[bptr_counter + 1] = dpp.samples_A[0]
         end
@@ -2118,41 +2114,37 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
         for bptr_counter = buf_idx, end_index, 2 do
             sam_B = mybuffer[bptr_counter + 1] + signed_rshift((weight_B * dpp.samples_B[0] + 512), 10)
             
-            if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
-                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+            if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end    
-            else 
-                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end                
 
             mybuffer[bptr_counter + 1] = sam_B
 
             dpp.samples_B[0] = mybuffer[bptr_counter] + signed_rshift((weight_A * sam_B + 512), 10)
-            
-            if (signed_xor(sam_B, mybuffer[bptr_counter]) < 0) then
-                if (sam_B ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+
+            if (sam_B ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                if (signed_xor(sam_B, mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end
-            else 
-                if (sam_B ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                else
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
-                    end    
+                    end
                 end
-            end
+            end                
             
             mybuffer[bptr_counter] = dpp.samples_B[0]
         end
@@ -2162,40 +2154,36 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
 
         for bptr_counter = buf_idx, end_index, 2 do
             sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
-            
-            if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
-                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+
+            if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end    
-            else 
-                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                else
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
                     end
                 end
-            end
+            end                
 
             sam_B = mybuffer[bptr_counter + 1] + signed_rshift((weight_B * dpp.samples_B[0] + 512), 10)
             
-            if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
-                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+            if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end
-            else 
-                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end    
 
             dpp.samples_B[0] = sam_A
             mybuffer[bptr_counter] = sam_A
@@ -2343,41 +2331,37 @@ function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx)
     elseif(dpp.term == -1) then
         for bptr_counter = buf_idx, end_index, 2 do
             sam_A = signed_rshift(( signed_rshift((bit32.band(dpp.samples_A[0], 0xffff) * weight_A), 9) + ( apply_weight_helper(dpp.samples_A[0]) * weight_A) + 1), 1) + mybuffer[bptr_counter]
-
-            if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
-                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+            
+            if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end
-            else
-                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                else
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
                     end
                 end
-            end
+            end                
 
             mybuffer[bptr_counter] = sam_A
             dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_B), 9) + ( apply_weight_helper(sam_A) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
-
-            if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
-                if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+            
+            if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end
-            else
-                if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end                
 
             mybuffer[bptr_counter + 1] = dpp.samples_A[0]
         end
@@ -2389,41 +2373,38 @@ function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx)
         for bptr_counter = buf_idx, end_index, 2 do
             sam_B = signed_rshift(( signed_rshift((bit32.band(dpp.samples_B[0], 0xffff) * weight_B), 9) + ( apply_weight_helper(dpp.samples_B[0]) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
 
-            if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
-                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+            if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end    
-            else 
-                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end                
 
             mybuffer[bptr_counter + 1] = sam_B
 
             dpp.samples_B[0] = signed_rshift(( signed_rshift((bit32.band(sam_B, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_B) * weight_A) + 1), 1) + mybuffer[bptr_counter]
-
-            if (signed_xor(sam_B, mybuffer[bptr_counter]) < 0) then
-                if (sam_B ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+        
+            if (sam_B ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                if (signed_xor(sam_B, mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end
-            else 
-                if (sam_B ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                else
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
-                    end    
+                    end
                 end
-            end
+            end                
+            
             
             mybuffer[bptr_counter] = dpp.samples_B[0]
         end
@@ -2434,39 +2415,35 @@ function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx)
         for bptr_counter = buf_idx, end_index, 2 do
             sam_A = signed_rshift(( signed_rshift((bit32.band(dpp.samples_A[0], 0xffff) * weight_A), 9) + ( apply_weight_helper(dpp.samples_A[0]) * weight_A) + 1), 1) + mybuffer[bptr_counter]
 
-            if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
-                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+            if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end    
-            else 
-                if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
+                else
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
                     end
                 end
-            end
+            end                
 
             sam_B = signed_rshift(( signed_rshift((bit32.band(dpp.samples_B[0], 0xffff) * weight_B), 9) + ( apply_weight_helper(dpp.samples_B[0]) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
 
-            if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
-                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+            if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end
-            else 
-                if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end                
 
             dpp.samples_B[0] = sam_A
             mybuffer[bptr_counter] = sam_A
@@ -2601,7 +2578,6 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
                 end
             end
 
-
             sam_A = signed_rshift((3 * mybuffer[buffer_index - 1] - mybuffer[buffer_index - 3]), 1)
             sam_B = mybuffer[buffer_index + 1]
             mybuffer[buffer_index + 1] = signed_rshift((weight_B * sam_A + 512), 10) + sam_B
@@ -2627,41 +2603,38 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
             sam_A = mybuffer[buffer_index]
 
             mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index - 1] + 512), 10) + sam_A
-            
-            if (signed_xor(mybuffer[buffer_index - 1], sam_A) < 0) then
-                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+           
+            if (sam_A ~= 0 and mybuffer[buffer_index - 1] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index - 1]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end    
-            else
-                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+                else
                     weight_A = weight_A + delta
-                    if (weight_A > 1024) then
+                    if weight_A > 1024 then
                         weight_A = 1024
                     end
                 end
-            end
+            end                
             
             sam_A = mybuffer[buffer_index + 1]
             mybuffer[buffer_index + 1] = signed_rshift((weight_B *  mybuffer[buffer_index] + 512), 10) + sam_A
-            
-            if (signed_xor(mybuffer[buffer_index], sam_A) < 0) then
-                if (mybuffer[buffer_index] ~= 0 and sam_A ~= 0 ) then
+
+            if (sam_A ~= 0 and mybuffer[buffer_index] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end
-            else
-                if (mybuffer[buffer_index] ~= 0 and sam_A ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end                
+            
         end
         
         buffer_index = end_index + 1
@@ -2675,41 +2648,38 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = mybuffer[buffer_index + 1]
             mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[buffer_index - 2] + 512), 10) + sam_A
-            
-            if (signed_xor(mybuffer[buffer_index - 2], sam_A) < 0) then
-                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+                        
+            if (sam_A ~= 0 and mybuffer[buffer_index - 2] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index - 2]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end
-            else
-                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end                
 
             sam_A = mybuffer[buffer_index]
             mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index + 1] + 512), 10) + sam_A
-            
-            if (signed_xor(mybuffer[buffer_index + 1], sam_A) < 0) then
-                if (mybuffer[buffer_index + 1] ~= 0 and sam_A ~= 0) then
+
+            if (sam_A ~= 0 and mybuffer[buffer_index + 1] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index + 1]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end
-            else
-                if (mybuffer[buffer_index + 1] ~= 0 and sam_A ~= 0) then
+                else
                     weight_A = weight_A + delta
-                    if (weight_A > 1024) then
+                    if weight_A > 1024 then
                         weight_A = 1024
                     end
                 end
-            end
+            end                
+            
         end
 
         buffer_index = end_index + 1
@@ -2722,40 +2692,36 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
 
             mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index - 1] + 512), 10) + sam_A
             
-            if (signed_xor(mybuffer[buffer_index - 1], sam_A) < 0) then
-                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+            if (sam_A ~= 0 and mybuffer[buffer_index - 1] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index - 1]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end
-            else 
-                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+                else
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
                     end
                 end
-            end
+            end                
 
             sam_A = mybuffer[buffer_index + 1]
             mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[buffer_index - 2] + 512), 10) + sam_A
             
-            if (signed_xor(mybuffer[buffer_index - 2], sam_A) < 0) then
-                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+            if (sam_A ~= 0 and mybuffer[buffer_index - 2] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index - 2]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end
-            else 
-                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end                
         end    
 
         buffer_index = end_index + 1
@@ -2903,41 +2869,38 @@ function decorr_stereo_pass_cont_24bit(dpp, mybuffer, sample_count, buf_idx)
 
             mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 1], 0xffff) * weight_A), 9) + ( apply_weight_helper(mybuffer[buffer_index - 1]) * weight_A) + 1), 1) + sam_A
 
-            if (signed_xor(mybuffer[buffer_index - 1], sam_A) < 0) then
-                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+            if (sam_A ~= 0 and mybuffer[buffer_index - 1] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index - 1]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end    
-            else
-                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+                else
                     weight_A = weight_A + delta
-                    if (weight_A > 1024) then
+                    if weight_A > 1024 then
                         weight_A = 1024
                     end
                 end
-            end
+            end                
             
             sam_A = mybuffer[buffer_index + 1]
 
             mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index], 0xffff) * weight_B), 9) + ( apply_weight_helper(mybuffer[buffer_index]) * weight_B) + 1), 1) + sam_A
 
-            if (signed_xor(mybuffer[buffer_index], sam_A) < 0) then
-                if (mybuffer[buffer_index] ~= 0 and sam_A ~= 0 ) then
+            if (sam_A ~= 0 and mybuffer[buffer_index] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end
-            else
-                if (mybuffer[buffer_index] ~= 0 and sam_A ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end                
+            
         end
         
         buffer_index = end_index + 1
@@ -2952,42 +2915,38 @@ function decorr_stereo_pass_cont_24bit(dpp, mybuffer, sample_count, buf_idx)
             sam_A = mybuffer[buffer_index + 1]
 
             mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 2], 0xffff) * weight_B), 9) + ( apply_weight_helper(mybuffer[buffer_index - 2]) * weight_B) + 1), 1) + sam_A
-
-            if (signed_xor(mybuffer[buffer_index - 2], sam_A) < 0) then
-                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+            
+            if (sam_A ~= 0 and mybuffer[buffer_index - 2] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index - 2]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end
-            else
-                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end                
 
             sam_A = mybuffer[buffer_index]
 
             mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index + 1], 0xffff) * weight_A), 9) + ( apply_weight_helper(mybuffer[buffer_index + 1]) * weight_A) + 1), 1) + sam_A
 
-            if (signed_xor(mybuffer[buffer_index + 1], sam_A) < 0) then
-                if (mybuffer[buffer_index + 1] ~= 0 and sam_A ~= 0) then
+            if (sam_A ~= 0 and mybuffer[buffer_index + 1] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index + 1]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end
-            else
-                if (mybuffer[buffer_index + 1] ~= 0 and sam_A ~= 0) then
+                else
                     weight_A = weight_A + delta
-                    if (weight_A > 1024) then
+                    if weight_A > 1024 then
                         weight_A = 1024
                     end
                 end
-            end
+            end                            
         end
 
         buffer_index = end_index + 1
@@ -2999,42 +2958,38 @@ function decorr_stereo_pass_cont_24bit(dpp, mybuffer, sample_count, buf_idx)
             sam_A = mybuffer[buffer_index]
 
             mybuffer[buffer_index] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 1], 0xffff) * weight_A), 9) + ( apply_weight_helper(mybuffer[buffer_index - 1]) * weight_A) + 1), 1) + sam_A
-
-            if (signed_xor(mybuffer[buffer_index - 1], sam_A) < 0) then
-                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+            
+            if (sam_A ~= 0 and mybuffer[buffer_index - 1] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index - 1]) < 0) then
                     weight_A = weight_A - delta
                     if weight_A < -1024 then
                         weight_A = -1024
                     end
-                end
-            else 
-                if (mybuffer[buffer_index - 1] ~= 0 and sam_A ~= 0 ) then
+                else
                     weight_A = weight_A + delta
                     if weight_A > 1024 then
                         weight_A = 1024
                     end
                 end
-            end
+            end                
 
             sam_A = mybuffer[buffer_index + 1]
 
             mybuffer[buffer_index + 1] = signed_rshift(( signed_rshift((bit32.band(mybuffer[buffer_index - 2], 0xffff) * weight_B), 9) + ( apply_weight_helper(mybuffer[buffer_index - 2]) * weight_B) + 1), 1) + sam_A
 
-            if (signed_xor(mybuffer[buffer_index - 2], sam_A) < 0) then
-                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+            if (sam_A ~= 0 and mybuffer[buffer_index - 2] ~= 0 ) then
+                if (signed_xor(sam_A, mybuffer[buffer_index - 2]) < 0) then
                     weight_B = weight_B - delta
                     if weight_B < -1024 then
                         weight_B = -1024
                     end
-                end
-            else 
-                if (mybuffer[buffer_index - 2] ~= 0 and sam_A ~= 0 ) then
+                else
                     weight_B = weight_B + delta
                     if weight_B > 1024 then
                         weight_B = 1024
                     end
                 end
-            end
+            end                
         end    
 
         buffer_index = end_index + 1
@@ -3875,13 +3830,13 @@ function get_words(nsamples, flags, w, bs, buffer)
 end
 
 function count_bits(av)
-    if (av < 256) then			-- 1 << 8
+    if (av < 256) then            -- 1 << 8
         return nbits_table[av+1]
     else
-        if (av < 65536) then		-- 1 << 16
+        if (av < 65536) then        -- 1 << 16
             return nbits_table[ bit32.rshift(av, 8) + 1] + 8
         else
-            if (av < 16777216) then		-- 1 << 24
+            if (av < 16777216) then        -- 1 << 24
                 return nbits_table[ bit32.rshift(av, 16) + 1] + 16
             else
                 return nbits_table[ bit32.rshift(av, 24) + 1] + 24
@@ -3942,14 +3897,14 @@ function mylog2(avalue)
 
     avalue = avalue + (bit32.rshift(avalue,9))
     
-    if (avalue < 256) then		-- 1 << 8
+    if (avalue < 256) then        -- 1 << 8
         dbits = nbits_table[avalue+1]        -- add 1 as array starts at 1 usually in Lua
         return bit32.lshift(dbits, 8) + log2_table[bit32.band(bit32.lshift(avalue, (9 - dbits)), 0xff) + 1]
     else
-        if (avalue < 65536) then			-- 1 << 16
+        if (avalue < 65536) then            -- 1 << 16
             dbits = nbits_table[bit32.rshift(avalue, 8) + 1] + 8
 
-        elseif (avalue < 16777216) then		-- 1 << 24
+        elseif (avalue < 16777216) then        -- 1 << 24
             dbits = nbits_table[bit32.rshift(avalue, 16) + 1] + 16
 
         else
