@@ -1692,17 +1692,23 @@ function unpack_samples(wpc, mybuffer, sample_count)
     local crc = wps.crc
     local mute_limit = (bit32.lshift(1, bit32.rshift(bit32.band(flags, MAG_MASK), MAG_LSB)) + 2)    
     local dpp = decorr_pass:new()
-    local buffer_counter = 0
+    local bcounter = 0
     local byte_count = wpc.config.bytes_per_sample
-    
+    local dpp_index = 0
     local samples_processed = 0
+    
+    local bf_abs = 0
+    local bf1_abs = 0
+    local crcstep1 = 0
+    local crcstep2 = 0
+    local crcstep3 = 0
 
     if (wps.sample_index + sample_count > wps.wphdr.block_index + wps.wphdr.block_samples) then
         sample_count = wps.wphdr.block_index + wps.wphdr.block_samples - wps.sample_index
     end    
 
     if (wps.mute_error > 0) then
-        tempc = 0
+        local tempc = 0
 
         if (bit32.band(flags, MONO_FLAG) ~= 0) then
             tempc = sample_count
@@ -1711,9 +1717,9 @@ function unpack_samples(wpc, mybuffer, sample_count)
         end    
 
         while (tempc > 0) do
-            mybuffer[buffer_counter] = 0
+            mybuffer[bcounter] = 0
             tempc = tempc - 1
-            buffer_counter = buffer_counter + 1
+            bcounter = bcounter + 1
         end    
 
         wps.sample_index = wps.sample_index + sample_count
@@ -1736,13 +1742,13 @@ function unpack_samples(wpc, mybuffer, sample_count)
         if(byte_count>2) then
             for tcount = 0, wps.num_terms-1, 1 do
                 dpp = wps.decorr_passes[dpp_index]
-                decorr_mono_pass_24bit(dpp, mybuffer, sample_count, buffer_counter)
+                decorr_mono_pass_24bit(dpp, mybuffer, sample_count)
                 dpp_index = dpp_index + 1
             end
         else
             for tcount = 0, wps.num_terms-1, 1 do
                 dpp = wps.decorr_passes[dpp_index]
-                decorr_mono_pass(dpp, mybuffer, sample_count, buffer_counter)
+                decorr_mono_pass(dpp, mybuffer, sample_count)
                 dpp_index = dpp_index + 1
             end
         end
@@ -1780,14 +1786,14 @@ function unpack_samples(wpc, mybuffer, sample_count)
             if(byte_count>2) then
                 for tcount = 0, wps.num_terms-1, 1 do
                     dpp = wps.decorr_passes[dpp_index]                
-                    decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buffer_counter)
+                    decorr_stereo_pass_24bit(dpp, mybuffer, sample_count)
                     wps.decorr_passes[dpp_index] = dpp
                     dpp_index = dpp_index + 1
                 end
             else
                 for tcount = 0, wps.num_terms-1, 1 do
                     dpp = wps.decorr_passes[dpp_index]                
-                    decorr_stereo_pass(dpp, mybuffer, sample_count, buffer_counter)
+                    decorr_stereo_pass(dpp, mybuffer, sample_count)
                     wps.decorr_passes[dpp_index] = dpp
                     dpp_index = dpp_index + 1
                 end            
@@ -1798,8 +1804,8 @@ function unpack_samples(wpc, mybuffer, sample_count)
             if(byte_count>2) then
                 for tcount = 0, wps.num_terms-1, 1 do
                     dpp = wps.decorr_passes[dpp_index]
-                    decorr_stereo_pass_24bit(dpp, mybuffer, 8, buffer_counter)                
-                    decorr_stereo_pass_cont_24bit(dpp, mybuffer, sample_count - 8, buffer_counter + 16)                
+                    decorr_stereo_pass_24bit(dpp, mybuffer, 8)                
+                    decorr_stereo_pass_cont_24bit(dpp, mybuffer, sample_count - 8, 16)                
                     wps.decorr_passes[dpp_index] = dpp
 
                     dpp_index = dpp_index + 1
@@ -1807,8 +1813,8 @@ function unpack_samples(wpc, mybuffer, sample_count)
             else
                 for tcount = 0, wps.num_terms-1, 1 do
                     dpp = wps.decorr_passes[dpp_index]
-                    decorr_stereo_pass(dpp, mybuffer, 8, buffer_counter)                
-                    decorr_stereo_pass_cont(dpp, mybuffer, sample_count - 8, buffer_counter + 16)                
+                    decorr_stereo_pass(dpp, mybuffer, 8)                
+                    decorr_stereo_pass_cont(dpp, mybuffer, sample_count - 8, 16)                
                     wps.decorr_passes[dpp_index] = dpp
 
                     dpp_index = dpp_index + 1
@@ -1880,7 +1886,7 @@ function unpack_samples(wpc, mybuffer, sample_count)
     end
     
     if (i ~= sample_count) then
-        sc = 0
+        local sc = 0
        
         if (bit32.band(flags, MONO_FLAG) ~= 0) then
             sc = sample_count
@@ -1888,12 +1894,12 @@ function unpack_samples(wpc, mybuffer, sample_count)
             sc = 2 * sample_count
         end    
             
-        buffer_counter = 0
+        bcounter = 0
 
         while (sc > 0) do        
-            mybuffer[buffer_counter] = 0
+            mybuffer[bcounter] = 0
             sc = sc -1
-            buffer_counter = buffer_counter + 1
+            bcounter = bcounter + 1
         end    
 
         wps.mute_error = 1
@@ -1903,9 +1909,9 @@ function unpack_samples(wpc, mybuffer, sample_count)
     mybuffer = fixup_samples(wps, mybuffer, i)
 
     if (bit32.band(flags, FALSE_STEREO) ~= 0) then
-        dest_idx = i * 2
-        src_idx = i
-        c = i
+        local dest_idx = i * 2
+        local src_idx = i
+        local c = i
 
         dest_idx = dest_idx - 1
         src_idx = src_idx - 1
@@ -1970,6 +1976,8 @@ function signed_xor(val1, val2)
 end
 
 function signed_lshift(val, shift)
+    local result = 0
+    
     if(val<0) then
         result = -bit32.lshift(-val,shift)
     else    
@@ -1994,7 +2002,7 @@ function apply_weight_helper(sample)
     return(result)
 end
 
-function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx) 
+function decorr_stereo_pass(dpp, mybuffer, sample_count) 
     local delta = dpp.delta
     local weight_A = dpp.weight_A
     local weight_B = dpp.weight_B
@@ -2003,10 +2011,10 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
     local m = 0
     local k = 0
     local bptr_counter = 0
-    local end_index = (buf_idx + sample_count * 2)-1
+    local end_index = (sample_count * 2) - 1
     
     if(dpp.term == 17) then
-        for bptr_counter = buf_idx, end_index, 2 do        
+        for bptr_counter = 0, end_index, 2 do        
             sam_A = 2 * dpp.samples_A[0] - dpp.samples_A[1]
             dpp.samples_A[1] = dpp.samples_A[0]
             dpp.samples_A[0] =  signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
@@ -2037,7 +2045,7 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
             mybuffer[bptr_counter + 1] = dpp.samples_B[0]
         end
     elseif(dpp.term == 18) then 
-        for bptr_counter = buf_idx, end_index, 2 do    
+        for bptr_counter = 0, end_index, 2 do    
             sam_A = signed_rshift((3 * dpp.samples_A[0] - dpp.samples_A[1]), 1)
             dpp.samples_A[1] = dpp.samples_A[0]        
             dpp.samples_A[0] =  signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
@@ -2068,7 +2076,7 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
         end
         
     elseif(dpp.term == -1) then
-        for bptr_counter = buf_idx, end_index, 2 do
+        for bptr_counter = 0, end_index, 2 do
             sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
             
             if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
@@ -2109,7 +2117,7 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
         sam_B = 0
         sam_A = 0
 
-        for bptr_counter = buf_idx, end_index, 2 do
+        for bptr_counter = 0, end_index, 2 do
             sam_B = mybuffer[bptr_counter + 1] + signed_rshift((weight_B * dpp.samples_B[0] + 512), 10)
             
             if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
@@ -2150,7 +2158,7 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
     elseif(dpp.term == -3) then
         sam_A = 0
 
-        for bptr_counter = buf_idx, end_index, 2 do
+        for bptr_counter = 0, end_index, 2 do
             sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
 
             if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
@@ -2195,7 +2203,7 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
         m = 0
         k = bit32.band(dpp.term, (MAX_TERM - 1))
 
-        for bptr_counter = buf_idx, end_index, 2 do
+        for bptr_counter = 0, end_index, 2 do
             sam_A = dpp.samples_A[m]
             dpp.samples_A[k] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
             
@@ -2254,7 +2262,7 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
     dpp.weight_B =  weight_B
 end
 
-function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx) 
+function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count) 
     local delta = dpp.delta
     local weight_A = dpp.weight_A
     local weight_B = dpp.weight_B
@@ -2263,10 +2271,10 @@ function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx)
     local m = 0
     local k = 0
     local bptr_counter = 0
-    local end_index = (buf_idx + sample_count * 2)-1
+    local end_index = (sample_count * 2) - 1
     
     if(dpp.term == 17) then
-        for bptr_counter = buf_idx, end_index, 2 do        
+        for bptr_counter = 0, end_index, 2 do        
             sam_A = 2 * dpp.samples_A[0] - dpp.samples_A[1]
             dpp.samples_A[1] = dpp.samples_A[0]
             dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
@@ -2296,7 +2304,7 @@ function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx)
             mybuffer[bptr_counter + 1] = dpp.samples_B[0]
         end
     elseif(dpp.term == 18) then 
-        for bptr_counter = buf_idx, end_index, 2 do    
+        for bptr_counter = 0, end_index, 2 do    
             sam_A = signed_rshift((3 * dpp.samples_A[0] - dpp.samples_A[1]), 1)
             dpp.samples_A[1] = dpp.samples_A[0]        
             dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
@@ -2327,7 +2335,7 @@ function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx)
         end
         
     elseif(dpp.term == -1) then
-        for bptr_counter = buf_idx, end_index, 2 do
+        for bptr_counter = 0, end_index, 2 do
             sam_A = signed_rshift(( signed_rshift((bit32.band(dpp.samples_A[0], 0xffff) * weight_A), 9) + ( apply_weight_helper(dpp.samples_A[0]) * weight_A) + 1), 1) + mybuffer[bptr_counter]
             
             if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
@@ -2368,7 +2376,7 @@ function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx)
         sam_B = 0
         sam_A = 0
 
-        for bptr_counter = buf_idx, end_index, 2 do
+        for bptr_counter = 0, end_index, 2 do
             sam_B = signed_rshift(( signed_rshift((bit32.band(dpp.samples_B[0], 0xffff) * weight_B), 9) + ( apply_weight_helper(dpp.samples_B[0]) * weight_B) + 1), 1) + mybuffer[bptr_counter + 1]
 
             if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
@@ -2410,7 +2418,7 @@ function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx)
     elseif(dpp.term == -3) then
         sam_A = 0
 
-        for bptr_counter = buf_idx, end_index, 2 do
+        for bptr_counter = 0, end_index, 2 do
             sam_A = signed_rshift(( signed_rshift((bit32.band(dpp.samples_A[0], 0xffff) * weight_A), 9) + ( apply_weight_helper(dpp.samples_A[0]) * weight_A) + 1), 1) + mybuffer[bptr_counter]
 
             if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
@@ -2455,7 +2463,7 @@ function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx)
         m = 0
         k = bit32.band(dpp.term, (MAX_TERM - 1))
 
-        for bptr_counter = buf_idx, end_index, 2 do
+        for bptr_counter = 0, end_index, 2 do
             sam_A = dpp.samples_A[m]
             dpp.samples_A[k] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
 
@@ -3045,17 +3053,17 @@ function decorr_stereo_pass_cont_24bit(dpp, mybuffer, sample_count, buf_idx)
     dpp.weight_B =  weight_B
 end
 
-function decorr_mono_pass(dpp, mybuffer, sample_count,  buf_idx) 
+function decorr_mono_pass(dpp, mybuffer, sample_count) 
     local delta = dpp.delta
     local weight_A = dpp.weight_A
     local sam_A = 0
     local m = 0
     local k = 0
     local bptr_counter = 0
-    local end_index = buf_idx + sample_count - 1
+    local end_index = sample_count - 1
 
     if(dpp.term == 17) then
-        for bptr_counter = buf_idx, end_index, 1 do
+        for bptr_counter = 0, end_index, 1 do
             sam_A = 2 * dpp.samples_A[0] - dpp.samples_A[1]
             dpp.samples_A[1] = dpp.samples_A[0]
             dpp.samples_A[0] =  signed_rshift((weight_A *sam_A + 512), 10) + mybuffer[bptr_counter]
@@ -3071,7 +3079,7 @@ function decorr_mono_pass(dpp, mybuffer, sample_count,  buf_idx)
             mybuffer[bptr_counter] = dpp.samples_A[0]
         end
     elseif (dpp.term == 18) then
-        for bptr_counter = buf_idx, end_index, 1 do    
+        for bptr_counter = 0, end_index, 1 do    
             sam_A = signed_rshift((3 * dpp.samples_A[0] - dpp.samples_A[1]), 1)
             dpp.samples_A[1] = dpp.samples_A[0]
             dpp.samples_A[0] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
@@ -3090,7 +3098,7 @@ function decorr_mono_pass(dpp, mybuffer, sample_count,  buf_idx)
         m = 0
         k = bit32.band(dpp.term, (MAX_TERM - 1))
         
-        for bptr_counter = buf_idx, end_index, 1 do        
+        for bptr_counter = 0, end_index, 1 do        
             sam_A = dpp.samples_A[m]
             dpp.samples_A[k] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
             
@@ -3124,17 +3132,17 @@ function decorr_mono_pass(dpp, mybuffer, sample_count,  buf_idx)
     dpp.weight_A =  weight_A
 end
 
-function decorr_mono_pass_24bit(dpp, mybuffer, sample_count,  buf_idx) 
+function decorr_mono_pass_24bit(dpp, mybuffer, sample_count) 
     local delta = dpp.delta
     local weight_A = dpp.weight_A
     local sam_A = 0
     local m = 0
     local k = 0
     local bptr_counter = 0
-    local end_index = buf_idx + sample_count - 1
+    local end_index = sample_count - 1
 
     if(dpp.term == 17) then
-        for bptr_counter = buf_idx, end_index, 1 do
+        for bptr_counter = 0, end_index, 1 do
             sam_A = 2 * dpp.samples_A[0] - dpp.samples_A[1]
             dpp.samples_A[1] = dpp.samples_A[0]
             dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
@@ -3150,7 +3158,7 @@ function decorr_mono_pass_24bit(dpp, mybuffer, sample_count,  buf_idx)
             mybuffer[bptr_counter] = dpp.samples_A[0]
         end
     elseif (dpp.term == 18) then
-        for bptr_counter = buf_idx, end_index, 1 do    
+        for bptr_counter = 0, end_index, 1 do    
             sam_A = signed_rshift((3 * dpp.samples_A[0] - dpp.samples_A[1]), 1)
             dpp.samples_A[1] = dpp.samples_A[0]
             dpp.samples_A[0] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
@@ -3169,7 +3177,7 @@ function decorr_mono_pass_24bit(dpp, mybuffer, sample_count,  buf_idx)
         m = 0
         k = bit32.band(dpp.term, (MAX_TERM - 1))
         
-        for bptr_counter = buf_idx, end_index, 1 do        
+        for bptr_counter = 0, end_index, 1 do        
             sam_A = dpp.samples_A[m]
             
             dpp.samples_A[k] = signed_rshift(( signed_rshift((bit32.band(sam_A, 0xffff) * weight_A), 9) + ( apply_weight_helper(sam_A) * weight_A) + 1), 1) + mybuffer[bptr_counter]
@@ -3230,12 +3238,12 @@ function fixup_samples( wps, mybuffer, sample_count)
 
     if (bit32.band(flags, INT32_DATA) ~= 0) then
 
-        sent_bits = wps.int32_sent_bits
-        zeros = wps.int32_zeros
-        ones = wps.int32_ones
-        dups = wps.int32_dups
+        local sent_bits = wps.int32_sent_bits
+        local zeros = wps.int32_zeros
+        local ones = wps.int32_ones
+        local dups = wps.int32_dups
         local buffer_counter = 0
-        count = 0
+        local count = 0
 
         if (bit32.band(flags, MONO_FLAG) ~= 0) then
             count = sample_count
