@@ -443,8 +443,8 @@ end
 
 
 function WavpackOpenFileInput(infile)
-    wpc = WavpackContext:new()
-    wps = wpc.stream
+    local wpc = WavpackContext:new()
+    local wps = wpc.stream
 
     wpc.infile = infile
     wpc.total_samples = -1
@@ -532,7 +532,7 @@ end
 
 function WavpackGetMode (wpc)
     
-    mode = 0
+    local mode = 0
 
     if (nil ~= wpc) then 
         if ( bit32.band(wpc.config.flags, CONFIG_HYBRID_FLAG) ~= 0) then
@@ -572,7 +572,7 @@ end
 -- encountered or an error occurs.
 
 function  WavpackUnpackSamples(wpc, buffer, samples)
-    wps = wpc.stream
+    local wps = wpc.stream
     local samples_unpacked = 0
     local samples_to_unpack = 0
     local num_channels = wpc.config.num_channels
@@ -945,7 +945,7 @@ function getbits(nbits, bs)
 end
 
 function bs_open_read(stream, buffer_start, buffer_end, file, file_bytes, passed) 
-    bs = Bitstream:new()
+    local bs = Bitstream:new()
 
     for i =0, (#stream - 1), 1 do
         bs.buf[i] = string.byte(stream,(i+1))
@@ -970,8 +970,8 @@ end
 
 function bs_read(bs)
     if (bs.file_bytes > 0) then
-        bytes_read = 0
-        bytes_to_read = 1024
+        local bytes_read = 0
+        local bytes_to_read = 1024
 
         if (bytes_to_read > bs.file_bytes) then
             bytes_to_read = bs.file_bytes
@@ -981,7 +981,7 @@ function bs_read(bs)
         if(nil==temp) then
             bytes_read = 0
         else
-            internal_counter = 0
+            local internal_counter = 0
             for i=1,bytes_to_read,1 do
                 bs.buf[internal_counter] = string.byte(temp,i)        
                 internal_counter = internal_counter + 1
@@ -1167,7 +1167,7 @@ end
 
 
 function process_metadata(wpc, wpmd) 
-    wps = wpc.stream
+    local wps = wpc.stream
 
     if(wpmd.id == ID_DUMMY) then
         return true
@@ -1231,8 +1231,8 @@ end
 -- scanned up to the one containing the audio bitstream.
 
 function unpack_init(wpc)
-    wps = wpc.stream
-    wpmd = WavpackMetadata:new()
+    local wps = wpc.stream
+    local wpmd = WavpackMetadata:new()
 
     if (wps.wphdr.block_samples > 0 and wps.wphdr.block_index ~= -1) then
         wps.sample_index = wps.wphdr.block_index
@@ -1280,12 +1280,12 @@ end
 -- be in the "wv" file.
 
 function init_wv_bitstream(wpc, wpmd)
-    wps = wpc.stream
+    local wps = wpc.stream
 
     if (wpmd.hasdata == true) then
         wps.wvbits = bs_open_read(wpmd.data, 0, wpmd.byte_length, wpc.infile, 0, 0)
     elseif (wpmd.byte_length > 0) then
-        blen = bit32.band(wpmd.byte_length, 1)
+        local blen = bit32.band(wpmd.byte_length, 1)
         wps.wvbits = bs_open_read(wpc.read_buffer, -1, #wpc.read_buffer, wpc.infile, (wpmd.byte_length + blen), 1)
     end
     return true
@@ -1299,8 +1299,8 @@ end
 -- to packing.
 
 function read_decorr_terms(wps, wpmd)
-    termcnt = wpmd.byte_length
-    byteptr = wpmd.data
+    local termcnt = wpmd.byte_length
+    local byteptr = wpmd.data
     local tmpwps = WavpackStream:new()
     
     local counter = 1        --arrays start at 1 in Lua
@@ -1419,7 +1419,7 @@ end
 -- those must obviously come first in the metadata.
 
 function read_decorr_samples(wps, wpmd)
-    byteptr = wpmd.data
+    local byteptr = wpmd.data
     local dpp = decorr_pass:new()
     local counter = 1
     local dpp_index = 0
@@ -1635,9 +1635,8 @@ end
 -- Read configuration information from metadata.
 
 function read_config_info(wpc, wpmd) 
-
-    bytecnt = wpmd.byte_length
-    byteptr = wpmd.data
+    local bytecnt = wpmd.byte_length
+    local byteptr = wpmd.data
     local counter = 1
 
     if (bytecnt >= 3) then
@@ -1655,8 +1654,8 @@ end
 -- Read non-standard sampling rate from metadata.
 
 function read_sample_rate(wpc, wpmd)
-    bytecnt = wpmd.byte_length
-    byteptr = wpmd.data
+    local bytecnt = wpmd.byte_length
+    local byteptr = wpmd.data
     local counter = 1
 
     if (bytecnt == 3) then
@@ -1687,17 +1686,16 @@ end
 -- occurs or the end of the block is reached.
 
 function unpack_samples(wpc, mybuffer, sample_count)
-    wps = wpc.stream
+    local wps = wpc.stream
     local flags = wps.wphdr.flags
     local i = 0
-    crc = wps.crc
-    mute_limit = (bit32.lshift(1, bit32.rshift(bit32.band(flags, MAG_MASK), MAG_LSB)) + 2)    
-    dpp = decorr_pass:new()
-    tcount = 0
+    local crc = wps.crc
+    local mute_limit = (bit32.lshift(1, bit32.rshift(bit32.band(flags, MAG_MASK), MAG_LSB)) + 2)    
+    local dpp = decorr_pass:new()
     local buffer_counter = 0
     local byte_count = wpc.config.bytes_per_sample
     
-    samples_processed = 0
+    local samples_processed = 0
 
     if (wps.sample_index + sample_count > wps.wphdr.block_index + wps.wphdr.block_samples) then
         sample_count = wps.wphdr.block_index + wps.wphdr.block_samples - wps.sample_index
@@ -1936,7 +1934,7 @@ function signed_rshift(val, shift)
     if(val>=0) then
         return (rshift(val,shift))
     else
-        local iterator = bit32.bnot(math.abs(val)) + 1
+        local iterator = val
         local leftmostbit = 0x80000000    -- in 32 bits, this is the leftmost bit
         -- when right shifting a negative number, you want the leftmost bit to always be set
         -- so instead of one shift, we do a series of right shifts, each time setting the leftmost bit
@@ -1997,14 +1995,14 @@ function apply_weight_helper(sample)
 end
 
 function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx) 
-    delta = dpp.delta
-    weight_A = dpp.weight_A
-    weight_B = dpp.weight_B
-    sam_A = 0
-    sam_B = 0
-    m = 0
-    k = 0
-    bptr_counter = 0
+    local delta = dpp.delta
+    local weight_A = dpp.weight_A
+    local weight_B = dpp.weight_B
+    local sam_A = 0
+    local sam_B = 0
+    local m = 0
+    local k = 0
+    local bptr_counter = 0
     local end_index = (buf_idx + sample_count * 2)-1
     
     if(dpp.term == 17) then
@@ -2257,14 +2255,14 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count, buf_idx)
 end
 
 function decorr_stereo_pass_24bit(dpp, mybuffer, sample_count, buf_idx) 
-    delta = dpp.delta
-    weight_A = dpp.weight_A
-    weight_B = dpp.weight_B
-    sam_A = 0
-    sam_B = 0
-    m = 0
-    k = 0
-    bptr_counter = 0
+    local delta = dpp.delta
+    local weight_A = dpp.weight_A
+    local weight_B = dpp.weight_B
+    local sam_A = 0
+    local sam_B = 0
+    local m = 0
+    local k = 0
+    local bptr_counter = 0
     local end_index = (buf_idx + sample_count * 2)-1
     
     if(dpp.term == 17) then
@@ -3215,11 +3213,11 @@ end
 -- lossless then the last step is to apply the final shift (if any).
 
 function fixup_samples( wps, mybuffer, sample_count) 
-    flags = wps.wphdr.flags
-    shift = bit32.rshift(bit32.band(flags, SHIFT_MASK), SHIFT_LSB)
+    local flags = wps.wphdr.flags
+    local shift = bit32.rshift(bit32.band(flags, SHIFT_MASK), SHIFT_LSB)
 
     if (bit32.band(flags, FLOAT_DATA) ~= 0) then    
-        sc = 0
+        local sc = 0
 
         if (bit32.band(flags, MONO_FLAG) ~= 0) then
             sc = sample_count
@@ -3266,13 +3264,13 @@ function fixup_samples( wps, mybuffer, sample_count)
     end
 
     if (bit32.band(flags, HYBRID_FLAG) ~= 0) then
-        min_value = 0
-        max_value = 0
-        min_shifted = 0
-        max_shifted = 0
+        local min_value = 0
+        local max_value = 0
+        local min_shifted = 0
+        local max_shifted = 0
         local buffer_counter = 0
         
-        switch_value = bit32.band(flags, BYTES_STORED)
+        local switch_value = bit32.band(flags, BYTES_STORED)
 
         if(switch_value == 0) then
             min_value = -128
@@ -3346,8 +3344,8 @@ end
 -- is a much simpler method that is virtually as robust for real world data.
 
 function check_crc_error(wpc)
-    wps = wpc.stream
-    result = 0
+    local wps = wpc.stream
+    local result = 0
 
     if (wps.crc ~= wps.wphdr.crc) then
         result = result + 1
@@ -3361,10 +3359,10 @@ end
 -- exactly correct then we flag and return an error.
 
 function read_entropy_vars(wps, wpmd)
-    byteptr = wpmd.data -- byteptr needs to be unsigned chars, so convert to int array
-    b_array = {}
+    local byteptr = wpmd.data -- byteptr needs to be unsigned chars, so convert to int array
+    local b_array = {}
     local i = 0
-    w = words_data:new()
+    local w = words_data:new()
     
     -- first lets clear down the values
     w.c[0].median[0] = 0
@@ -3554,8 +3552,8 @@ end
 -- some other error occurred.
 
 function get_words(nsamples, flags, w, bs, buffer)
-    c = w.c
-    csamples = 0
+    local c = w.c
+    local csamples = 0
     local buffer_counter = 0
     local entidx = 1
     local next8 = 0
@@ -3667,7 +3665,7 @@ function get_words(nsamples, flags, w, bs, buffer)
                     bs = bs_read(bs)
                 end    
 
-                bs.sr = bit32.bor(bs.sr, bit32.lshift(bs.buf[bs.buf_index], bs.bc)) -- values in buffer must be unsigned
+                bs.sr = bit32.bor(bs.sr, bit32.lshift(bs.buf[bs.buf_index], bs.bc))
 
                 next8 =  bit32.band(bs.sr, 0xff)
 
@@ -3852,9 +3850,9 @@ end
 -- to define the code.
 
 function read_code( bs, maxcode)
-    bitcount = count_bits(maxcode)
-    extras = bit32.lshift(1, bitcount) - maxcode - 1
-    code = 0
+    local bitcount = count_bits(maxcode)
+    local extras = bit32.lshift(1, bitcount) - maxcode - 1
+    local code = 0
 
     if (bitcount == 0) then
         return (0)
@@ -3893,7 +3891,7 @@ end
 -- The maximum value allowed is about 0xff800000 and returns 8447.
 
 function mylog2(avalue)
-    dbits = 0
+    local dbits = 0
 
     avalue = avalue + (bit32.rshift(avalue,9))
     
@@ -3933,7 +3931,7 @@ end
 -- conversions as well (i.e. the input range is -8192 to +8447).
 
 function exp2s(log)
-    value = 0
+    local value = 0
 
     if (log < 0) then
         return -exp2s(-log)
@@ -3954,7 +3952,7 @@ end
 -- weights are clipped here in the case that they are outside that range.
 
 function restore_weight(weight)
-    result = 0
+    local result = 0
 
     if(weight<0) then
         result = -bit32.lshift(-weight,3)
