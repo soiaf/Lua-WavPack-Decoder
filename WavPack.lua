@@ -2012,12 +2012,22 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
     local k = 0
     local bptr_counter = 0
     local end_index = (sample_count * 2) - 1
+    local tempval = 0
+    local bor = bit32.bor
+    local rshift = bit32.rshift
     
     if(dpp.term == 17) then
         for bptr_counter = 0, end_index, 2 do        
             sam_A = 2 * dpp.samples_A[0] - dpp.samples_A[1]
             dpp.samples_A[1] = dpp.samples_A[0]
-            dpp.samples_A[0] =  signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            --dpp.samples_A[0] =  signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            tempval = (weight_A * sam_A + 512)
+            if(tempval>=0) then
+                dpp.samples_A[0] = rshift(tempval,10) + mybuffer[bptr_counter]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+        dpp.samples_A[0] = tempval - 4294967296 + mybuffer[bptr_counter]
+            end
             
             if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then    
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
@@ -2032,7 +2042,16 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
             sam_A = 2 * dpp.samples_B[0] - dpp.samples_B[1]
             dpp.samples_B[1] = dpp.samples_B[0]
 
-            dpp.samples_B[0] =  signed_rshift((weight_B *sam_A + 512), 10) + mybuffer[bptr_counter + 1]
+            --dpp.samples_B[0] =  signed_rshift((weight_B *sam_A + 512), 10) + mybuffer[bptr_counter + 1]
+            tempval = (weight_B * sam_A + 512)
+            if(tempval>=0) then
+                dpp.samples_B[0] = rshift(tempval,10) + mybuffer[bptr_counter + 1]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                dpp.samples_B[0] = tempval - 4294967296 + mybuffer[bptr_counter + 1]
+            end
+
+
             
             if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then            
@@ -2048,7 +2067,16 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
         for bptr_counter = 0, end_index, 2 do    
             sam_A = signed_rshift((3 * dpp.samples_A[0] - dpp.samples_A[1]), 1)
             dpp.samples_A[1] = dpp.samples_A[0]        
-            dpp.samples_A[0] =  signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            --dpp.samples_A[0] =  signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            tempval = (weight_A * sam_A + 512)
+            if(tempval>=0) then
+                dpp.samples_A[0] = rshift(tempval,10) + mybuffer[bptr_counter]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                dpp.samples_A[0] = tempval - 4294967296 + mybuffer[bptr_counter]
+            end
+
+
             
             if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
@@ -2062,8 +2090,16 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
 
             sam_A = signed_rshift((3 * dpp.samples_B[0] - dpp.samples_B[1]), 1)
             dpp.samples_B[1] = dpp.samples_B[0]
-            dpp.samples_B[0] = signed_rshift((weight_B * sam_A + 512), 10) + mybuffer[bptr_counter + 1]
-            
+            --dpp.samples_B[0] = signed_rshift((weight_B * sam_A + 512), 10) + mybuffer[bptr_counter + 1]
+            tempval = (weight_B * sam_A + 512)
+            if(tempval>=0) then
+                dpp.samples_B[0] = rshift(tempval,10) + mybuffer[bptr_counter + 1]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                dpp.samples_B[0] = tempval - 4294967296 + mybuffer[bptr_counter + 1]
+            end
+
+
             if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
                     weight_B = weight_B - delta
@@ -2077,7 +2113,14 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
         
     elseif(dpp.term == -1) then
         for bptr_counter = 0, end_index, 2 do
-            sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
+            --sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
+            tempval = (weight_A * dpp.samples_A[0] + 512)
+            if(tempval>=0) then
+                sam_A = rshift(tempval,10) + mybuffer[bptr_counter]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                sam_A = tempval - 4294967296 + mybuffer[bptr_counter]
+            end
             
             if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
                 if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
@@ -2094,7 +2137,14 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
             end            
 
             mybuffer[bptr_counter] = sam_A
-            dpp.samples_A[0] = mybuffer[bptr_counter + 1] +  signed_rshift((weight_B * sam_A + 512), 10)
+            --dpp.samples_A[0] = mybuffer[bptr_counter + 1] +  signed_rshift((weight_B * sam_A + 512), 10)
+            tempval = (weight_B * sam_A + 512)
+            if(tempval>=0) then
+                dpp.samples_A[0] = rshift(tempval,10) + mybuffer[bptr_counter + 1]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                dpp.samples_A[0] = tempval - 4294967296 + mybuffer[bptr_counter + 1]
+            end
                   
             if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
@@ -2118,7 +2168,14 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
         sam_A = 0
 
         for bptr_counter = 0, end_index, 2 do
-            sam_B = mybuffer[bptr_counter + 1] + signed_rshift((weight_B * dpp.samples_B[0] + 512), 10)
+            --sam_B = mybuffer[bptr_counter + 1] + signed_rshift((weight_B * dpp.samples_B[0] + 512), 10)
+            tempval = (weight_B * dpp.samples_B[0] + 512)
+            if(tempval>=0) then
+                sam_B = rshift(tempval,10) + mybuffer[bptr_counter + 1]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                sam_B = tempval - 4294967296 + mybuffer[bptr_counter + 1]
+            end
             
             if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
                 if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
@@ -2136,7 +2193,14 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
 
             mybuffer[bptr_counter + 1] = sam_B
 
-            dpp.samples_B[0] = mybuffer[bptr_counter] + signed_rshift((weight_A * sam_B + 512), 10)
+            --dpp.samples_B[0] = mybuffer[bptr_counter] + signed_rshift((weight_A * sam_B + 512), 10)
+            tempval = (weight_A * sam_B + 512)
+            if(tempval>=0) then
+                dpp.samples_B[0] = rshift(tempval,10) + mybuffer[bptr_counter]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                dpp.samples_B[0] = tempval - 4294967296 + mybuffer[bptr_counter]
+            end
 
             if (sam_B ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
                 if (signed_xor(sam_B, mybuffer[bptr_counter]) < 0) then
@@ -2159,8 +2223,15 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
         sam_A = 0
 
         for bptr_counter = 0, end_index, 2 do
-            sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
-
+            --sam_A = mybuffer[bptr_counter] + signed_rshift((weight_A * dpp.samples_A[0] + 512), 10)
+            tempval = (weight_A * dpp.samples_A[0] + 512)
+            if(tempval>=0) then
+                sam_A = rshift(tempval,10) + mybuffer[bptr_counter]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                sam_A = tempval - 4294967296 + mybuffer[bptr_counter]
+            end
+            
             if (dpp.samples_A[0] ~= 0 and mybuffer[bptr_counter] ~= 0 ) then
                 if (signed_xor(dpp.samples_A[0], mybuffer[bptr_counter]) < 0) then
                     weight_A = weight_A - delta
@@ -2175,7 +2246,14 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
                 end
             end                
 
-            sam_B = mybuffer[bptr_counter + 1] + signed_rshift((weight_B * dpp.samples_B[0] + 512), 10)
+            --sam_B = mybuffer[bptr_counter + 1] + signed_rshift((weight_B * dpp.samples_B[0] + 512), 10)
+            tempval = (weight_B * dpp.samples_B[0] + 512)
+            if(tempval>=0) then
+                sam_B = rshift(tempval,10) + mybuffer[bptr_counter + 1]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                sam_B = tempval - 4294967296 + mybuffer[bptr_counter + 1]
+            end
             
             if (dpp.samples_B[0] ~= 0 and mybuffer[bptr_counter + 1] ~= 0 ) then
                 if (signed_xor(dpp.samples_B[0], mybuffer[bptr_counter + 1]) < 0) then
@@ -2205,7 +2283,16 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
 
         for bptr_counter = 0, end_index, 2 do
             sam_A = dpp.samples_A[m]
-            dpp.samples_A[k] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            --dpp.samples_A[k] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            tempval = (weight_A * sam_A + 512)
+            if(tempval>=0) then
+                dpp.samples_A[k] = rshift(tempval,10) + mybuffer[bptr_counter]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                dpp.samples_A[k] = tempval - 4294967296 + mybuffer[bptr_counter]
+            end
+
+
             
             if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
@@ -2219,7 +2306,14 @@ function decorr_stereo_pass(dpp, mybuffer, sample_count)
 
             sam_A = dpp.samples_B[m]
     
-            dpp.samples_B[k] = signed_rshift((weight_B * sam_A + 512), 10) + mybuffer[bptr_counter + 1]
+            --dpp.samples_B[k] = signed_rshift((weight_B * sam_A + 512), 10) + mybuffer[bptr_counter + 1]
+            tempval = (weight_B * sam_A + 512)
+            if(tempval>=0) then
+                dpp.samples_B[k] = rshift(tempval,10) + mybuffer[bptr_counter + 1]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                dpp.samples_B[k] = tempval - 4294967296 + mybuffer[bptr_counter + 1]
+            end
            
             if (sam_A ~= 0 and mybuffer[bptr_counter + 1] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter + 1]) < 0) then
@@ -2533,13 +2627,23 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
     local i = 0
     local buffer_index = buf_idx
     local end_index = (buf_idx + sample_count * 2)-1
+    local tempval = 0
+    local bor = bit32.bor
+    local rshift = bit32.rshift
 
     if(dpp.term == 17) then
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = 2 * mybuffer[buffer_index - 2] - mybuffer[buffer_index - 4]
 
             sam_B = mybuffer[buffer_index]
-            mybuffer[buffer_index] = signed_rshift((weight_A *  sam_A + 512), 10) + sam_B
+            --mybuffer[buffer_index] = signed_rshift((weight_A *  sam_A + 512), 10) + sam_B
+            tempval = (weight_A * sam_A + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index] = rshift(tempval,10) + sam_B
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index] = tempval - 4294967296 + sam_B
+            end
             
             if (sam_A ~= 0 and sam_B ~= 0) then
                 if signed_xor(sam_A, sam_B) < 0 then
@@ -2551,8 +2655,15 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
 
             sam_A = 2 * mybuffer[buffer_index - 1] - mybuffer[buffer_index - 3]
             sam_B = mybuffer[buffer_index + 1]
-            mybuffer[buffer_index + 1] = signed_rshift((weight_B * sam_A + 512), 10) + sam_B
-            
+            --mybuffer[buffer_index + 1] = signed_rshift((weight_B * sam_A + 512), 10) + sam_B
+            tempval = (weight_B * sam_A + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index + 1] = rshift(tempval,10) + sam_B
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index + 1] = tempval - 4294967296 + sam_B
+            end
+           
             if (sam_A ~= 0 and sam_B ~= 0) then 
                 if signed_xor(sam_A, sam_B) < 0 then
                     weight_B = weight_B - delta 
@@ -2574,7 +2685,14 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = signed_rshift((3 * mybuffer[buffer_index - 2] - mybuffer[buffer_index - 4]), 1)
             sam_B = mybuffer[buffer_index]
-            mybuffer[buffer_index] = signed_rshift((weight_A * sam_A + 512), 10) + sam_B
+            --mybuffer[buffer_index] = signed_rshift((weight_A * sam_A + 512), 10) + sam_B
+            tempval = (weight_A * sam_A + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index] = rshift(tempval,10) + sam_B
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index] = tempval - 4294967296 + sam_B
+            end
             
             if (sam_A ~= 0 and sam_B ~= 0) then 
                 if signed_xor(sam_A, sam_B) < 0 then
@@ -2586,8 +2704,15 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
 
             sam_A = signed_rshift((3 * mybuffer[buffer_index - 1] - mybuffer[buffer_index - 3]), 1)
             sam_B = mybuffer[buffer_index + 1]
-            mybuffer[buffer_index + 1] = signed_rshift((weight_B * sam_A + 512), 10) + sam_B
-            
+            --mybuffer[buffer_index + 1] = signed_rshift((weight_B * sam_A + 512), 10) + sam_B
+            tempval = (weight_B * sam_A + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index + 1] = rshift(tempval,10) + sam_B
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index + 1] = tempval - 4294967296 + sam_B
+            end
+           
             if (sam_A ~= 0 and sam_B ~= 0) then 
                 if signed_xor(sam_A, sam_B) < 0 then
                     weight_B = weight_B - delta 
@@ -2608,8 +2733,15 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = mybuffer[buffer_index]
 
-            mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index - 1] + 512), 10) + sam_A
-           
+            --mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index - 1] + 512), 10) + sam_A
+            tempval = (weight_A * mybuffer[buffer_index - 1] + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index] = rshift(tempval,10) + sam_A
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index] = tempval - 4294967296 + sam_A
+            end
+            
             if (sam_A ~= 0 and mybuffer[buffer_index - 1] ~= 0 ) then
                 if (signed_xor(sam_A, mybuffer[buffer_index - 1]) < 0) then
                     weight_A = weight_A - delta
@@ -2625,8 +2757,15 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
             end                
             
             sam_A = mybuffer[buffer_index + 1]
-            mybuffer[buffer_index + 1] = signed_rshift((weight_B *  mybuffer[buffer_index] + 512), 10) + sam_A
-
+            --mybuffer[buffer_index + 1] = signed_rshift((weight_B *  mybuffer[buffer_index] + 512), 10) + sam_A
+            tempval = (weight_B * mybuffer[buffer_index] + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index + 1] = rshift(tempval,10) + sam_A
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index + 1] = tempval - 4294967296 + sam_A
+            end
+            
             if (sam_A ~= 0 and mybuffer[buffer_index] ~= 0 ) then
                 if (signed_xor(sam_A, mybuffer[buffer_index]) < 0) then
                     weight_B = weight_B - delta
@@ -2653,8 +2792,15 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
 
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = mybuffer[buffer_index + 1]
-            mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[buffer_index - 2] + 512), 10) + sam_A
-                        
+            --mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[buffer_index - 2] + 512), 10) + sam_A
+            tempval = (weight_B * mybuffer[buffer_index - 2] + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index + 1] = rshift(tempval,10) + sam_A
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index + 1] = tempval - 4294967296 + sam_A
+            end
+            
             if (sam_A ~= 0 and mybuffer[buffer_index - 2] ~= 0 ) then
                 if (signed_xor(sam_A, mybuffer[buffer_index - 2]) < 0) then
                     weight_B = weight_B - delta
@@ -2670,8 +2816,15 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
             end                
 
             sam_A = mybuffer[buffer_index]
-            mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index + 1] + 512), 10) + sam_A
-
+            --mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index + 1] + 512), 10) + sam_A
+            tempval = (weight_A * mybuffer[buffer_index + 1] + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index] = rshift(tempval,10) + sam_A
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index] = tempval - 4294967296 + sam_A
+            end
+            
             if (sam_A ~= 0 and mybuffer[buffer_index + 1] ~= 0 ) then
                 if (signed_xor(sam_A, mybuffer[buffer_index + 1]) < 0) then
                     weight_A = weight_A - delta
@@ -2696,7 +2849,14 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = mybuffer[buffer_index]
 
-            mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index - 1] + 512), 10) + sam_A
+            --mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[buffer_index - 1] + 512), 10) + sam_A
+            tempval = (weight_A * mybuffer[buffer_index - 1] + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index] = rshift(tempval,10) + sam_A
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index] = tempval - 4294967296 + sam_A
+            end
             
             if (sam_A ~= 0 and mybuffer[buffer_index - 1] ~= 0 ) then
                 if (signed_xor(sam_A, mybuffer[buffer_index - 1]) < 0) then
@@ -2713,7 +2873,14 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
             end                
 
             sam_A = mybuffer[buffer_index + 1]
-            mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[buffer_index - 2] + 512), 10) + sam_A
+            --mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[buffer_index - 2] + 512), 10) + sam_A
+            tempval = (weight_B * mybuffer[buffer_index - 2] + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index + 1] = rshift(tempval,10) + sam_A
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index + 1] = tempval - 4294967296 + sam_A
+            end
             
             if (sam_A ~= 0 and mybuffer[buffer_index - 2] ~= 0 ) then
                 if (signed_xor(sam_A, mybuffer[buffer_index - 2]) < 0) then
@@ -2741,7 +2908,14 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
         for buffer_index = buf_idx, end_index, 2 do
             sam_A = mybuffer[buffer_index]
             
-            mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[tptr] + 512), 10) + sam_A
+            --mybuffer[buffer_index] = signed_rshift((weight_A * mybuffer[tptr] + 512), 10) + sam_A
+            tempval = (weight_A * mybuffer[tptr] + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index] = rshift(tempval,10) + sam_A
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index] = tempval - 4294967296 + sam_A
+            end
            
             if (mybuffer[tptr] ~= 0 and sam_A ~= 0) then 
                 if signed_xor(mybuffer[tptr], sam_A) < 0 then
@@ -2752,7 +2926,14 @@ function decorr_stereo_pass_cont(dpp, mybuffer, sample_count, buf_idx)
             end
 
             sam_A = mybuffer[buffer_index + 1]
-            mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[tptr + 1] + 512), 10) + sam_A
+            --mybuffer[buffer_index + 1] = signed_rshift((weight_B * mybuffer[tptr + 1] + 512), 10) + sam_A
+            tempval = (weight_B * mybuffer[tptr + 1] + 512)
+            if(tempval>=0) then
+                mybuffer[buffer_index + 1] = rshift(tempval,10) + sam_A
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                mybuffer[buffer_index + 1] = tempval - 4294967296 + sam_A
+            end
 
             if (mybuffer[tptr + 1] ~= 0 and sam_A ~= 0) then 
                 if signed_xor(mybuffer[tptr + 1], sam_A) < 0 then
@@ -3061,12 +3242,22 @@ function decorr_mono_pass(dpp, mybuffer, sample_count)
     local k = 0
     local bptr_counter = 0
     local end_index = sample_count - 1
+	local tempval = 0
+	local rshift = bit32.rshift
+	local bor = bit32.bor
 
     if(dpp.term == 17) then
         for bptr_counter = 0, end_index, 1 do
             sam_A = 2 * dpp.samples_A[0] - dpp.samples_A[1]
             dpp.samples_A[1] = dpp.samples_A[0]
-            dpp.samples_A[0] =  signed_rshift((weight_A *sam_A + 512), 10) + mybuffer[bptr_counter]
+            --dpp.samples_A[0] =  signed_rshift((weight_A *sam_A + 512), 10) + mybuffer[bptr_counter]
+			tempval = (weight_A * sam_A + 512)
+            if(tempval>=0) then
+                dpp.samples_A[0] = rshift(tempval,10) + mybuffer[bptr_counter]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                dpp.samples_A[0] = tempval - 4294967296 + mybuffer[bptr_counter]
+            end
             
             if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
@@ -3082,7 +3273,14 @@ function decorr_mono_pass(dpp, mybuffer, sample_count)
         for bptr_counter = 0, end_index, 1 do    
             sam_A = signed_rshift((3 * dpp.samples_A[0] - dpp.samples_A[1]), 1)
             dpp.samples_A[1] = dpp.samples_A[0]
-            dpp.samples_A[0] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            --dpp.samples_A[0] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            tempval = (weight_A * sam_A + 512)
+            if(tempval>=0) then
+                dpp.samples_A[0] = rshift(tempval,10) + mybuffer[bptr_counter]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                dpp.samples_A[0] = tempval - 4294967296 + mybuffer[bptr_counter]
+            end			
             
             if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
@@ -3100,7 +3298,14 @@ function decorr_mono_pass(dpp, mybuffer, sample_count)
         
         for bptr_counter = 0, end_index, 1 do        
             sam_A = dpp.samples_A[m]
-            dpp.samples_A[k] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            --dpp.samples_A[k] = signed_rshift((weight_A * sam_A + 512), 10) + mybuffer[bptr_counter]
+            tempval = (weight_A * sam_A + 512)
+            if(tempval>=0) then
+                dpp.samples_A[k] = rshift(tempval,10) + mybuffer[bptr_counter]
+            else
+                tempval = bor(rshift(tempval,10),0xFFC00000)
+                dpp.samples_A[k] = tempval - 4294967296 + mybuffer[bptr_counter]
+            end			
             
             if (sam_A ~= 0 and mybuffer[bptr_counter] ~= 0) then
                 if (signed_xor(sam_A, mybuffer[bptr_counter]) < 0) then
@@ -3974,3 +4179,4 @@ function restore_weight(weight)
     
     return result
 end
+
