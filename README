@@ -5,7 +5,7 @@
 //      Distributed under the BSD Software License (see license.txt)      //
 ////////////////////////////////////////////////////////////////////////////
 
-This package contains a Lua implementation of an WavPack decoder.
+This package contains a pure Lua implementation of an WavPack decoder.
 This implementation is built based on the tiny version of the WavPack 
 4.40 decoder. It is packaged with a demo command-line programs that accept a
 WavPack audio file as input and outputs a RIFF wav file (with the filename 
@@ -22,5 +22,14 @@ where input.wv is the name of the WavPack file you wish to decode.
 The Lua implementation of the WavPack decoder will not handle "correction" files,
 and decodes only the first two channels of multi-channel files. 
 It also will not accept WavPack files from before version 4.0.
+
+Note: Currently LuaJIT does not support this code as it uses bit32.
+However it is very easy to get it working by including the file numberlua.lua from
+https://github.com/davidm/lua-bit-numberlua
+and adding the 2 lines as directed in its synopsis to WvDemo.lua and WavPack.lua
+
+local bit32 = require 'bit.numberlua'.bit32
+assert(bit32.band(-1) == 0xffffffff)
+
 
 Please direct any questions or comments to beatofthedrum@gmail.com
