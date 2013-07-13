@@ -17,6 +17,7 @@
 
 SAMPLE_BUFFER_SIZE = 256
 
+BITSTREAM_BUFFER_SIZE = 1024        -- size of buffer in Bitstream 
 BYTES_STORED = 3       -- 1-4 bytes/sample
 MONO_FLAG  = 4       -- not stereo
 HYBRID_FLAG = 8       -- hybrid mode
@@ -291,7 +292,10 @@ WavpackMetadata = {
     data = {},
     id = 0,
     hasdata = 0,    -- 0 does not have data, 1 has data
-    status = 0    -- 0 ok, 1 error
+    status = 0,    -- 0 ok, 1 error
+    bytecount = 24        -- we use this to determine if we have read all the metadata 
+                          -- in a block by checking bytecount again the block length
+                          -- ckSize is block size minus 8. WavPack header is 32 bytes long so we start at 24
 }
 function WavpackMetadata:new()
     o = {}
@@ -333,7 +337,7 @@ function Bitstream:new()
     o = {}
     setmetatable(o,self)
     self.__index = self
-    self.buf[1024] = 0
+    self.buf[BITSTREAM_BUFFER_SIZE] = 0
     return o
 end        
 
@@ -623,11 +627,14 @@ function  WavpackUnpackSamples(wpc, buffer, samples)
                 samples_to_unpack = samples_to_unpack * num_channels
             end    
 
+            bcounter = buf_idx
             while (samples_to_unpack > 0) do
-                temp_buffer[bcounter] = 0
+                buffer[bcounter] = 0
                 bcounter = bcounter + 1
                 samples_to_unpack = samples_to_unpack - 1
             end    
+            
+            buf_idx = bcounter
 
             goto continue
         end        
@@ -971,7 +978,7 @@ end
 function bs_read(bs)
     if (bs.file_bytes > 0) then
         local bytes_read = 0
-        local bytes_to_read = 1024
+        local bytes_to_read = BITSTREAM_BUFFER_SIZE
 
         if (bytes_to_read > bs.file_bytes) then
             bytes_to_read = bs.file_bytes
@@ -995,20 +1002,18 @@ function bs_read(bs)
             bs.bs_end = bytes_read
             bs.file_bytes = bs.file_bytes - bytes_read
         else 
-            for i = 0, bs.bs_end - bs.buf_index - 1, 1 do
-                bs.buf[i] = -1
+            for i = 0, BITSTREAM_BUFFER_SIZE - 1, 1 do
+                bs.buf[i] = 255        -- fill buffer with value 0xff when error
             end    
             bs.error = 1
         end    
     else 
         bs.error = 1
+        
+        for i = 0,BITSTREAM_BUFFER_SIZE - 1, 1 do
+            bs.buf[i] = 255        -- fill buffer with value 0xff when error
+        end 
     end    
-
-    if (bs.error > 0) then
-        for i = 0,bs.bs_end - bs.buf_index - 1, 1 do
-            bs.buf[i] = -1
-        end    
-    end
     
     bs.ptr = 0
     bs.buf_index = 0
@@ -1071,6 +1076,11 @@ function read_metadata_buff(wpc, wpmd)
     local bytes_to_read = 0
     local bytes_read = 0
     local tchar = 0
+    
+    if (wpmd.bytecount >= wpc.stream.wphdr.ckSize) then
+        -- we have read all the data in this block
+        return false
+    end
 
     wpmd.id = wpc.infile:read(1)
     tchar =   wpc.infile:read(1)
@@ -1083,11 +1093,12 @@ function read_metadata_buff(wpc, wpmd)
     wpmd.id = string.byte(wpmd.id)
     tchar =   string.byte(tchar)
 
+    wpmd.bytecount = wpmd.bytecount + 2
     wpmd.byte_length = bit32.lshift(tchar, 1)
 
     if (bit32.band(wpmd.id, ID_LARGE) ~= 0) then
+   
         wpmd.id = bit32.band(wpmd.id, bit32.bnot(ID_LARGE))
-
         tchar = wpc.infile:read(1)
         
         if(tchar == nil) then
@@ -1108,6 +1119,7 @@ function read_metadata_buff(wpc, wpmd)
         tchar = string.byte(tchar)
 
         wpmd.byte_length = wpmd.byte_length + bit32.lshift(tchar, 17)
+        wpmd.bytecount = wpmd.bytecount + 2
     end    
 
     if (bit32.band(wpmd.id, ID_ODD_SIZE) ~= 0) then
@@ -1115,20 +1127,22 @@ function read_metadata_buff(wpc, wpmd)
         wpmd.byte_length = wpmd.byte_length - 1
     end    
 
-    if (wpmd.byte_length == 0 or wpmd.id == ID_WV_BITSTREAM) then
+    if (wpmd.byte_length == 0 or wpmd.id == ID_WV_BITSTREAM) then   
         wpmd.hasdata = false
         return true
     end    
 
     bytes_to_read = wpmd.byte_length + bit32.band(wpmd.byte_length, 1)
     
+    wpmd.bytecount = wpmd.bytecount + bytes_to_read
+    
     if (bytes_to_read > wpc.READ_BUFFER_SIZE) then
         bytes_read = 0
         wpmd.hasdata = false
 
         while (bytes_to_read > wpc.READ_BUFFER_SIZE) do
-
             wpc.read_buffer = wpc.infile:read( wpc.READ_BUFFER_SIZE )
+            
             if(wpc.read_buffer == nil) then
                 return false
             end
@@ -1149,6 +1163,7 @@ function read_metadata_buff(wpc, wpmd)
         bytes_read = 0
 
         wpc.read_buffer = wpc.infile:read(bytes_to_read)
+       
         if(wpc.read_buffer == nil) then
             wpmd.hasdata = false
             return false
@@ -1161,7 +1176,7 @@ function read_metadata_buff(wpc, wpmd)
         end    
 
     end        
-
+    
     return true
 end    
 
@@ -4537,7 +4552,7 @@ function get_words(nsamples, flags, w, bs, buffer)
 
                 while (ones_count < (LIMIT_ONES + 1) and bs.bitval > 0) do
                     ones_count = ones_count + 1
-                    bs = getbit(bs)
+                    bs = getbit(bs)                
                 end    
                 
                 if (ones_count == (LIMIT_ONES + 1)) then            
